@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const bcrypt = require('bcrypt'); // 🔒 Added encryption library
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -16,7 +17,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/artcanvas_db')
 // User Schema - FIXED: Add indexing options
 const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true }, // Will now store secure hashed strings
     role: { type: String, default: 'customer' }
 });
 
@@ -35,7 +36,7 @@ const User = mongoose.model('User', UserSchema);
 User.collection.dropIndex('email_1').catch(() => {});
 User.syncIndexes().catch(err => console.error('Index sync error:', err));
 
-// Orders Schema
+// Orders Schema - NORMALIZED EMAIL SCHEMA SEARCH TARGETS
 const OrderSchema = new mongoose.Schema({
     serviceType: String,
     tierPlan: String,
@@ -43,7 +44,7 @@ const OrderSchema = new mongoose.Schema({
     formatSpecs: String,
     briefNotes: String,
     status: { type: String, default: 'Pending' },
-    customerEmail: String,
+    customerEmail: { type: String, lowercase: true, trim: true },
     createdAt: { type: Date, default: Date.now }
 });
 const Order = mongoose.model('Order', OrderSchema);
@@ -74,41 +75,45 @@ const Payment = mongoose.model('Payment', PaymentSchema);
 app.post('/api/auth/login', async (req, res) => {
     const { email, password } = req.body;
     
-    console.log(`📥 Login attempt: ${email}`);
+    console.log(`📥 Login attempt received for: ${email}`);
     
     try {
+        // 1. Check for master hardcoded Admin account
         if (email === 'admin@artcanvas.com' && password === 'admin123') {
-            console.log(`✦ Admin login successful`);
-            return res.json({ success: true, role: 'admin', email });
+            console.log(`✦ Admin master account login validated successfully.`);
+            return res.json({ success: true, role: 'admin', email: email.toLowerCase().trim() });
         }
         
+        // 2. Lookup customer in Database
         const user = await User.findOne({ email: email.toLowerCase().trim() });
         if (!user) {
-            console.log(`❌ User not found: ${email}`);
+            console.log(`❌ User not found pattern match inside MongoDB records: ${email}`);
             return res.status(404).json({ success: false, message: 'Account not found. Please register.' });
         }
         
-        if (user.password !== password) {
-            console.log(`❌ Invalid password for: ${email}`);
+        // 3. SECURE COMPARISON: Decrypt and compare hash strings
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            console.log(`❌ Authentication hash check failure for user context email: ${email}`);
             return res.status(401).json({ success: false, message: 'Invalid password.' });
         }
         
-        console.log(`✦ User login successful: ${email}`);
+        console.log(`✦ User logged in successfully: ${user.email}`);
         res.json({ success: true, role: user.role, email: user.email });
     } catch (err) {
-        console.error('❌ Login error:', err.message);
+        console.error('❌ Login error endpoint exception trace:', err.message);
         res.status(500).json({ success: false, message: 'Server error: ' + err.message });
     }
 });
 
-// REGISTER - FIXED VERSION
+// REGISTER - SECURE VERSION WITH HASHING
 app.post('/api/auth/register', async (req, res) => {
     const { email, password } = req.body;
     
-    console.log(`📥 Register attempt: ${email}`);
+    console.log(`📥 Register database insertion request for: ${email}`);
     
     if (!email || !password) {
-        console.log(`❌ Missing email or password`);
+        console.log(`❌ Missing user core text entry credential parameters.`);
         return res.status(400).json({ success: false, message: 'Email and password required' });
     }
     
@@ -119,21 +124,24 @@ app.post('/api/auth/register', async (req, res) => {
         // Check if email already exists
         const existing = await User.findOne({ email: normalizedEmail });
         if (existing) {
-            console.log(`❌ Email already registered: ${normalizedEmail}`);
+            console.log(`❌ Unique value validation blocking registration context: ${normalizedEmail}`);
             return res.status(400).json({ success: false, message: 'Email already registered. Please login.' });
         }
         
-        // Create new user
+        // SECURE HASHING: Scramble the raw text password 10 times
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        
+        // Create new user with secure password
         const newUser = new User({
             email: normalizedEmail,
-            password: password,
+            password: hashedPassword, // 🔒 Saved as secure hash string
             role: 'customer'
         });
         
         await newUser.save();
         
-        console.log(`✦ User registered successfully: ${normalizedEmail}`);
-        console.log(`📊 User saved to database:`, {
+        console.log(`✦ User entry instance saved securely to db cluster node:`, {
             id: newUser._id,
             email: newUser.email,
             role: newUser.role
@@ -147,37 +155,49 @@ app.post('/api/auth/register', async (req, res) => {
         });
         
     } catch (err) {
-        console.error('❌ Register error:', err);
-        
+        console.error('❌ Registration system crash stack:', err);
         if (err.code === 11000) {
             return res.status(400).json({ success: false, message: 'Email already registered' });
         }
-        
         res.status(500).json({ success: false, message: 'Server error: ' + err.message });
     }
 });
 
-// ===== ORDERS =====
+// ===== ORDERS API PIEPELINE =====
+
+// CREATE NEW ORDER DOCUMENT
 app.post('/api/orders/create', async (req, res) => {
+    console.log('📥 Post incoming payload values caught inside order routing chain:', req.body);
     try {
+        if (req.body.customerEmail) {
+            req.body.customerEmail = req.body.customerEmail.toLowerCase().trim();
+        }
         const newOrder = await Order.create(req.body);
+        console.log('✦ Document item successfully pushed live to MongoDB Collection instance:', newOrder._id);
         res.status(201).json({ success: true, order: newOrder });
     } catch (err) {
+        console.error('❌ Failed to construct order payload matching database requirements:', err.message);
         res.status(500).json({ success: false, message: err.message });
     }
 });
 
+// READ PASSIVE ORDERS LIST - CASE-INSENSITIVE RESOLVED
 app.get('/api/orders', async (req, res) => {
     const { email, role } = req.query;
     try {
-        const filter = role === 'admin' ? {} : { customerEmail: email };
+        const searchEmail = email ? email.toLowerCase().trim() : '';
+        const filter = role === 'admin' ? {} : { customerEmail: searchEmail };
+        
+        console.log('📊 Querying Order document collection space utilizing telemetry variables:', filter);
         const orders = await Order.find(filter).sort({ createdAt: -1 });
         res.json(orders);
     } catch (err) {
+        console.error('❌ Find execution broke downstream filters on MongoDB instance:', err.message);
         res.status(500).json({ success: false, message: err.message });
     }
 });
 
+// UPDATE EXISTING ORDER
 app.put('/api/orders/:id', async (req, res) => {
     const { status } = req.body;
     try {
@@ -188,16 +208,17 @@ app.put('/api/orders/:id', async (req, res) => {
     }
 });
 
+// REMOVE/CANCEL CHANNELS
 app.delete('/api/orders/:id', async (req, res) => {
     try {
         await Order.findByIdAndDelete(req.params.id);
-        res.json({ success: true, message: 'Order deleted' });
+        res.json({ success: true, message: 'Order dropped from records registry cluster successfully.' });
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
     }
 });
 
-// ===== REVIEWS =====
+// ===== REVIEWS ROUTING API =====
 app.post('/api/reviews', async (req, res) => {
     try {
         const review = await Review.create(req.body);
@@ -216,7 +237,7 @@ app.get('/api/reviews', async (req, res) => {
     }
 });
 
-// ===== ROUTES =====
+// ===== STATIC ROUTE ENDPOINTS =====
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/services.html', (req, res) => res.sendFile(path.join(__dirname, 'services.html')));
 app.get('/portfolio.html', (req, res) => res.sendFile(path.join(__dirname, 'portfolio.html')));
@@ -230,7 +251,7 @@ app.get('/admin.html', (req, res) => res.sendFile(path.join(__dirname, 'admin.ht
 app.use((req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 app.listen(PORT, () => {
-    console.log(`\n✦ Server running: http://localhost:${PORT}`);
-    console.log(`✦ Login: http://localhost:${PORT}/login.html`);
-    console.log(`✦ Admin test - Email: admin@artcanvas.com | Password: admin123\n`);
+    console.log(`\n✦ Express Server instance running: http://localhost:${PORT}`);
+    console.log(`✦ Workspace Link: http://localhost:${PORT}/login.html`);
+    console.log(`✦ Admin credentials - Email: admin@artcanvas.com | Password: admin123\n`);
 });

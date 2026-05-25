@@ -17,15 +17,13 @@
       <li><a href="orders.html" style="color:#c084d4;font-weight:600">Orders</a></li>
       <li><a href="index.html#reviews">Reviews</a></li>
     </ul>
-    <a href="auth.html"><button class="btn-nav">👤 My Account</button></a>
+    <a href="login.html"><button class="btn-nav">👤 My Account</button></a>
   </nav>
 
   <div class="orders-layout">
 
-    <!-- SIDEBAR -->
     <aside class="orders-sidebar">
       <div class="sidebar-profile">
-        <!-- FIXED: Aisha Khan references removed entirely. Added dynamic placeholder tracking hooks -->
         <div class="profile-avatar" id="userAvatarPlaceholder">??</div>
         <div>
           <div class="profile-name" id="userProfileName">Loading User...</div>
@@ -33,18 +31,16 @@
         </div>
       </div>
       <nav class="sidebar-nav">
-        <a href="#" class="snav active" onclick="showTab('place')">🎨 Place Order</a>
-        <a href="#" class="snav" onclick="showTab('track')">📦 My Orders</a>
-        <a href="#" class="snav" onclick="showTab('payment')">💳 Payment</a>
-        <a href="#" class="snav" onclick="showTab('review')">⭐ Leave Review</a>
-        <button class="btn-nav" onclick="executeSignOutRoute()">Logout ✦</button>
+        <a href="#" class="snav active" id="link-place" onclick="showTab('place')">🎨 Place Order</a>
+        <a href="#" class="snav" id="link-track" onclick="showTab('track')">📦 My Orders</a>
+        <a href="#" class="snav" id="link-payment" onclick="showTab('payment')">💳 Payment</a>
+        <a href="#" class="snav" id="link-review" onclick="showTab('review')">⭐ Leave Review</a>
+        <button class="btn-nav" onclick="executeSignOutRoute()" style="margin-top:20px;width:100%;text-align:left;background:none;border:none;color:var(--muted);padding:10px 16px;cursor:pointer;">Logout ✦</button>
       </nav>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="orders-main">
 
-      <!-- PLACE ORDER -->
       <div class="tab-content active" id="tab-place">
         <div class="page-header">
           <div>
@@ -61,55 +57,50 @@
               <label>Service Category</label>
               <select id="orderCategory" onchange="updateServices()">
                 <option value="">Select category...</option>
-                <option value="2d">2D Art & Game Design</option>
-                <option value="3d">3D Art & Modeling</option>
-                <option value="illustration">Illustration Services</option>
-                <option value="graphic">Graphic Design</option>
-                <option value="merch">Merchandise Design</option>
-                <option value="book">Novel & Book Design</option>
+                <option value="2D Art & Game Design">2D Art & Game Design</option>
+                <option value="3D Art & Modeling">3D Art & Modeling</option>
+                <option value="Illustration Services">Illustration Services</option>
+                <option value="Graphic Design">Graphic Design</option>
+                <option value="Merchandise Design">Merchandise Design</option>
+                <option value="Novel & Book Design">Novel & Book Design</option>
               </select>
             </div>
             <div class="form-group">
               <label>Specific Service</label>
               <select id="orderService">
-                <option>Select category first...</option>
+                <option value="">Select category first...</option>
               </select>
+            </div>
+            <div class="form-group">
+              <label>Resolution / Format Specs</label>
+              <input type="text" id="orderSpecs" placeholder="e.g. 4K Resolution PNG, 300 DPI Print Format">
             </div>
             <div class="form-group">
               <label>Pricing Tier</label>
               <div class="tier-cards">
                 <label class="tier-card">
-                  <input type="radio" name="tier" value="basic"> 
+                  <input type="radio" name="tier" value="Basic" data-price="29" onclick="calculateFormTotals()">
                   <div><strong>Basic</strong><span>$29</span></div>
                 </label>
                 <label class="tier-card">
-                  <input type="radio" name="tier" value="standard" checked>
+                  <input type="radio" name="tier" value="Standard" data-price="79" checked onclick="calculateFormTotals()">
                   <div><strong>Standard</strong><span>$79</span></div>
                 </label>
                 <label class="tier-card">
-                  <input type="radio" name="tier" value="pro">
+                  <input type="radio" name="tier" value="Pro" data-price="149" onclick="calculateFormTotals()">
                   <div><strong>Pro</strong><span>$149</span></div>
                 </label>
               </div>
             </div>
             <div class="form-group">
               <label>Project Description</label>
-              <textarea rows="4" placeholder="Describe your project in detail — style, colors, references, mood..."></textarea>
-            </div>
-            <div class="form-group">
-              <label>Reference Files (optional)</label>
-              <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
-                <input type="file" id="fileInput" style="display:none" multiple>
-                <span style="font-size:28px">📎</span>
-                <p>Click to upload references</p>
-                <small>PNG, JPG, PDF up to 10MB</small>
-              </div>
+              <textarea id="orderDescription" rows="4" placeholder="Describe your project in detail — style, colors, references, mood..."></textarea>
             </div>
             <div class="form-group">
               <label>Deadline</label>
               <input type="date" id="deadline">
             </div>
-            <button class="btn-primary" style="width:100%;margin-top:8px" onclick="showTab('payment')">Continue to Payment ✦</button>
+            <button class="btn-primary" style="width:100%;margin-top:8px" onclick="proceedToCheckoutPaymentTab()">Continue to Payment ✦</button>
           </div>
 
           <div class="order-summary">
@@ -125,7 +116,7 @@
             <div class="summary-card" style="margin-top:16px">
               <h4>What's Included</h4>
               <ul class="include-list">
-                <li>✓ Source files (PSD/AI)</li>
+                <li>✓ Source files (PSD/AI / OBJ)</li>
                 <li>✓ All common formats</li>
                 <li>✓ Commercial license</li>
                 <li>✓ Dedicated support</li>
@@ -135,78 +126,16 @@
         </div>
       </div>
 
-      <!-- MY ORDERS / TRACK -->
       <div class="tab-content" id="tab-track">
         <div class="page-header">
           <div>
             <div class="section-label">Order History</div>
             <div class="section-title" style="margin-bottom:4px">My Orders</div>
           </div>
-          <div class="filter-btns" style="margin-bottom:0">
-            <button class="filter-btn active">All</button>
-            <button class="filter-btn">Pending</button>
-            <button class="filter-btn">In Progress</button>
-            <button class="filter-btn">Completed</button>
-          </div>
         </div>
-
-        <div class="orders-list">
-
-          <div class="order-row">
-            <div class="order-icon" style="background:#fde8f0">🧚</div>
-            <div class="order-info">
-              <div class="order-name">Fantasy Character Design</div>
-              <div class="order-meta">2D Art · Standard · Placed 3 days ago</div>
-              <div class="order-progress">
-                <div class="progress-bar"><div class="progress-fill" style="width:65%;background:linear-gradient(90deg,#c084d4,#85aef7)"></div></div>
-                <span>65% complete</span>
-              </div>
-            </div>
-            <div class="order-right">
-              <span class="status-badge status-progress">In Progress</span>
-              <div class="order-price">$79</div>
-              <button class="btn-sm" onclick="alert('Order details would open here')">View Details</button>
-            </div>
-          </div>
-
-          <div class="order-row">
-            <div class="order-icon" style="background:#eef8e8">🏪</div>
-            <div class="order-info">
-              <div class="order-name">Brand Logo Design</div>
-              <div class="order-meta">Graphic Design · Pro · Placed 10 days ago</div>
-              <div class="order-progress">
-                <div class="progress-bar"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,#10b981,#34d399)"></div></div>
-                <span>Delivered</span>
-              </div>
-            </div>
-            <div class="order-right">
-              <span class="status-badge status-done">Completed</span>
-              <div class="order-price">$149</div>
-              <button class="btn-sm" onclick="showTab('review')">Leave Review</button>
-            </div>
-          </div>
-
-          <div class="order-row">
-            <div class="order-icon" style="background:#e8f0fe">📖</div>
-            <div class="order-info">
-              <div class="order-name">Book Cover Illustration</div>
-              <div class="order-meta">Illustration · Basic · Placed 1 day ago</div>
-              <div class="order-progress">
-                <div class="progress-bar"><div class="progress-fill" style="width:10%;background:linear-gradient(90deg,#fbbf24,#f59e0b)"></div></div>
-                <span>Just started</span>
-              </div>
-            </div>
-            <div class="order-right">
-              <span class="status-badge status-pending">Pending</span>
-              <div class="order-price">$29</div>
-              <button class="btn-sm danger" onclick="cancelOrder(this)">Cancel</button>
-            </div>
-          </div>
-
-        </div>
+        <div class="orders-list" id="dynamicOrdersCollectionContainer"></div>
       </div>
 
-      <!-- PAYMENT -->
       <div class="tab-content" id="tab-payment">
         <div class="page-header">
           <div>
@@ -219,9 +148,9 @@
         <div class="payment-grid">
           <div class="payment-form-card">
             <div class="pay-methods">
-              <button class="pay-method active" onclick="setMethod(this,'card')">💳 Card</button>
-              <button class="pay-method" onclick="setMethod(this,'paypal')">🅿️ PayPal</button>
-              <button class="pay-method" onclick="setMethod(this,'crypto')">🦊 MetaMask</button>
+              <button class="pay-method active" id="pm-card" onclick="switchLocalPayMethod('card')">💳 Card</button>
+              <button class="pay-method" id="pm-paypal" onclick="switchLocalPayMethod('paypal')">🅿️ PayPal</button>
+              <button class="pay-method" id="pm-crypto" onclick="switchLocalPayMethod('crypto')">🦊 MetaMask</button>
             </div>
 
             <div id="cardMethod">
@@ -234,13 +163,12 @@
                 </div>
               </div>
               <div class="form-group">
-                <!-- FIXED: Changed static input placeholders to safe general prompts -->
                 <label>Cardholder Name</label>
-                <input type="text" placeholder="Your Name" oninput="document.getElementById('cardNameDisplay').textContent=this.value||'YOUR NAME'">
+                <input type="text" id="billingCardName" placeholder="Your Name" oninput="document.getElementById('cardNameDisplay').textContent=this.value.toUpperCase()||'YOUR NAME'">
               </div>
               <div class="form-group">
                 <label>Card Number</label>
-                <input type="text" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)">
+                <input type="text" placeholder="1234 5678 9012 3456" maxlength="19" oninput="document.getElementById('cardNumDisplay').textContent=this.value||'•••• •••• •••• ••••'">
               </div>
               <div class="form-row-2">
                 <div class="form-group">
@@ -262,38 +190,34 @@
             <div id="cryptoMethod" style="display:none;text-align:center;padding:32px 0">
               <div style="font-size:48px;margin-bottom:12px">🦊</div>
               <p style="color:var(--muted);margin-bottom:16px">Connect your MetaMask wallet to pay with ETH.</p>
-              <button class="btn-primary" style="width:auto;padding:10px 28px" onclick="connectMetaMask()">Connect Wallet</button>
+              <button class="btn-primary" style="width:auto;padding:10px 28px" type="button" onclick="alert('MetaMask Integration Mock Success!')">Connect Wallet</button>
             </div>
 
-            <button class="btn-auth" onclick="processPayment()" style="margin-top:16px">Pay $79 Now ✦</button>
+            <button class="btn-auth" id="checkoutPaymentTriggerButton" onclick="triggerOpenGatewayModalInvoice()" style="margin-top:16px">Pay $79 Now ✦</button>
           </div>
 
           <div class="payment-summary">
             <div class="summary-card">
               <h4>Order Summary</h4>
-              <div class="summary-row"><span>Fantasy Character Design</span><span>$79</span></div>
-              <div class="summary-row"><span>Standard Tier</span><span>—</span></div>
+              <div class="summary-row"><span id="pay-summary-title">Commission Setup</span><span id="pay-summary-cost">$79</span></div>
               <div class="summary-row"><span>Processing fee</span><span>$0</span></div>
               <div class="summary-divider"></div>
-              <div class="summary-row total"><span>Total Due</span><span>$79</span></div>
+              <div class="summary-row total"><span>Total Due</span><span id="pay-summary-total">$79</span></div>
             </div>
             <div class="secure-badge">🔒 Secured by 256-bit SSL encryption</div>
           </div>
         </div>
 
-        <!-- CONFIRMATION (hidden) -->
         <div class="confirm-overlay hidden" id="confirmOverlay">
           <div class="confirm-box">
             <div style="font-size:60px;margin-bottom:16px">🎉</div>
             <h3>Payment Successful!</h3>
-            <p>Your order has been placed. Order ID: <strong>#ACS-2847</strong></p>
-            <p style="color:var(--muted);font-size:13px;margin-top:8px">You'll receive a confirmation email shortly.</p>
-            <button class="btn-primary" style="margin-top:24px" onclick="showTab('track')">Track My Order ✦</button>
+            <p>Your order has been saved to the database.</p>
+            <button class="btn-primary" style="margin-top:24px" onclick="dismissOverlayAndTrack()">Track My Order ✦</button>
           </div>
         </div>
       </div>
 
-      <!-- LEAVE REVIEW -->
       <div class="tab-content" id="tab-review">
         <div class="page-header">
           <div>
@@ -303,85 +227,311 @@
         </div>
         <div class="review-form-card">
           <div class="form-group">
-            <label>Which order are you reviewing?</label>
-            <select>
-              <option>Brand Logo Design — Completed</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Your Rating</label>
-            <div class="star-rating" id="starRating">
-              <span class="star" data-val="1">★</span>
-              <span class="star" data-val="2">★</span>
-              <span class="star" data-val="3">★</span>
-              <span class="star" data-val="4">★</span>
-              <span class="star" data-val="5">★</span>
-            </div>
-          </div>
-          <div class="form-group">
             <label>Review Title</label>
-            <input type="text" placeholder="e.g. Amazing work!">
+            <input type="text" id="reviewTitle" placeholder="e.g. Amazing work!">
           </div>
           <div class="form-group">
             <label>Your Review</label>
-            <textarea rows="5" placeholder="Tell others about your experience..."></textarea>
+            <textarea id="reviewText" rows="5" placeholder="Tell others about your experience..."></textarea>
           </div>
-          <div class="form-group">
-            <label>Would you recommend us?</label>
-            <div class="radio-group">
-              <label class="checkbox-label"><input type="radio" name="recommend" checked> Yes, definitely!</label>
-              <label class="checkbox-label"><input type="radio" name="recommend"> Maybe</label>
-              <label class="checkbox-label"><input type="radio" name="recommend"> No</label>
-            </div>
-          </div>
-          <button class="btn-primary" style="width:100%" onclick="submitReview()">Submit Review ✦</button>
+          <button class="btn-primary" style="width:100%" onclick="submitReviewAction()">Submit Review ✦</button>
         </div>
       </div>
 
     </main>
   </div>
 
-  <script src="orders.js"></script>
-
-<div class="payment-modal-overlay" id="paymentEngineModal">
-  <div class="payment-modal-card">
-    <div class="payment-accent-bar"></div>
-    <h3>✦ Secure Secure Checkout Pipeline</h3>
-    <p style="font-size:12px; color:var(--muted); margin-bottom: 20px;">Complete fake transaction sequence parameters to log invoice dataset records.</p>
-    
-    <div class="payment-invoice-summary">
-      <div>Project Configuration: <strong id="modalSummaryService">-</strong></div>
-      <div>Grand Value Total: <strong id="modalSummaryPrice" style="color:var(--accent)">-</strong></div>
+  <!-- Payment Modal -->
+  <div id="paymentEngineModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:10000;">
+    <div style="background:#fff;padding:30px;border-radius:16px;max-width:450px;width:100%;text-align:center;position:relative;">
+      <h3>✦ Secure Checkout</h3>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:20px;">Complete payment to confirm your order.</p>
+      <div style="background:#f8fafc;padding:12px;border-radius:8px;margin-bottom:15px;text-align:left;font-size:14px;">
+        <div style="margin-bottom:6px">Service: <strong id="modalSummaryService">-</strong></div>
+        <div>Total: <strong id="modalSummaryPrice" style="color:#c084d4">-</strong></div>
+      </div>
+      <form id="dummyPaymentGatewayForm" onsubmit="executeDatabaseOrderInsertionPipeline(event)">
+        <div class="form-group" style="text-align:left;margin-bottom:12px;">
+          <label style="font-size:12px;font-weight:600;">Cardholder Name</label>
+          <input type="text" id="payCardName" placeholder="Cardholder Name" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:6px;" required>
+        </div>
+        <div class="form-group" style="text-align:left;margin-bottom:12px;">
+          <label style="font-size:12px;font-weight:600;">Card Number</label>
+          <input type="text" placeholder="4242 •••• •••• 4242" style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:6px;" required>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:20px;">
+          <button type="button" onclick="togglePaymentInterface(false)" style="flex:1;padding:10px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;cursor:pointer;">Cancel</button>
+          <button type="submit" style="flex:1;padding:10px;background:linear-gradient(135deg,#c084d4,#85aef7);color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;">Pay Now ✦</button>
+        </div>
+      </form>
     </div>
-
-    <form id="dummyPaymentGatewayForm" onsubmit="processDummyCheckoutPayment(event)">
-      <div class="form-group" style="text-align:left;">
-        <label>Cardholder Identification Name</label>
-        <!-- FIXED: Updated identifying placeholder values to default prompts -->
-        <input type="text" id="payCardName" placeholder="Cardholder Name" required>
-      </div>
-      <div class="form-group" style="text-align:left;">
-        <label>Dummy Card Architecture Token</label>
-        <input type="text" placeholder="4242 •••• •••• 4242" maxlength="16" required>
-      </div>
-      <div class="form-row-2" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; text-align:left;">
-        <div class="form-group">
-          <label>Expiry Date</label>
-          <input type="text" placeholder="MM/YY" maxlength="5" required>
-        </div>
-        <div class="form-group">
-          <label>Security Code (CVC)</label>
-          <input type="password" placeholder="•••" maxlength="3" required>
-        </div>
-      </div>
-      
-      <div style="display:flex; gap:12px; margin-top:20px;">
-        <button type="button" class="btn-cancel-pay" onclick="togglePaymentInterface(false)">Abort Gateway</button>
-        <button type="submit" class="btn-submit-pay">Execute Remittance ✦</button>
-      </div>
-    </form>
   </div>
-</div>
 
+  <script>
+    // FIX: Normalize email immediately on load — this was the root cause of orders not showing.
+    // Raw localStorage value may have mixed case; MongoDB stores lowercase; query never matched.
+    const rawEmail = localStorage.getItem('userSessionEmail') || '';
+    const sessionEmail = rawEmail.toLowerCase().trim();
+    if (sessionEmail) localStorage.setItem('userSessionEmail', sessionEmail); // persist normalized form
+
+    const sessionRole = localStorage.getItem('userSessionRole') || 'customer';
+    const sessionName = localStorage.getItem('userName') || sessionEmail.split('@')[0] || 'User';
+
+    if (!sessionEmail) {
+      alert("No active session. Redirecting to login.");
+      window.location.href = '/login.html';
+    }
+
+    const specificServicesMap = {
+      "2D Art & Game Design": ["Character Concept Art", "Environment Layouts", "UI/UX Asset Packs", "2D Sprite Sheet Animations"],
+      "3D Art & Modeling": ["Low-Poly Game Models", "High-Poly Sculpting", "PBR Texture Mapping", "Rigging & Scene Setup"],
+      "Illustration Services": ["Fantasy Key Art", "Splash Illustrations", "Portrait Commissions", "Vector Concept Layouts"],
+      "Graphic Design": ["Brand Architecture Logo", "Social Media Kits", "Streamer Layout Packs", "Marketing Banners"],
+      "Merchandise Design": ["Apparel Typography Print", "Enamel Pin Vectors", "Sticker Collectible Sets", "Product Box Layouts"],
+      "Novel & Book Design": ["Typography Cover Layout", "Full Wrap-Around Dust Jacket", "Interior Page Chapter Headings"]
+    };
+
+    function updateServices() {
+      const categorySelect = document.getElementById('orderCategory');
+      const serviceSelect = document.getElementById('orderService');
+      serviceSelect.innerHTML = "";
+      const opts = specificServicesMap[categorySelect.value] || [];
+      if (!opts.length) {
+        serviceSelect.innerHTML = '<option value="">Select category first...</option>';
+        return;
+      }
+      opts.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = opt.textContent = s;
+        serviceSelect.appendChild(opt);
+      });
+      calculateFormTotals();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById('userProfileName').textContent = sessionName;
+      document.getElementById('userProfileEmail').textContent = sessionEmail;
+      document.getElementById('userAvatarPlaceholder').textContent = sessionName.substring(0,2).toUpperCase();
+      document.getElementById('orderCategory').addEventListener('change', updateServices);
+      document.getElementById('orderService').addEventListener('change', calculateFormTotals);
+      calculateFormTotals();
+      queryActiveUserCollectionRecords();
+    });
+
+    function showTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.snav').forEach(b => b.classList.remove('active'));
+      const tab = document.getElementById(`tab-${tabName}`);
+      const link = document.getElementById(`link-${tabName}`);
+      if (tab) tab.classList.add('active');
+      if (link) link.classList.add('active');
+      if (tabName === 'track') queryActiveUserCollectionRecords();
+    }
+
+    function calculateFormTotals() {
+      const category = document.getElementById('orderCategory').value || "General Commission";
+      const specific = document.getElementById('orderService').value;
+      const combined = specific ? `${category} (${specific})` : category;
+      const radio = document.querySelector('input[name="tier"]:checked');
+      const tier = radio ? radio.value : "Standard";
+      const cost = radio ? radio.getAttribute('data-price') : "79";
+      document.getElementById('sum-service').textContent = combined;
+      document.getElementById('sum-tier').textContent = tier;
+      document.getElementById('sum-price').textContent = `$${cost}`;
+      document.getElementById('pay-summary-title').textContent = `${combined} [${tier}]`;
+      document.getElementById('pay-summary-cost').textContent = `$${cost}`;
+      document.getElementById('pay-summary-total').textContent = `$${cost}`;
+      document.getElementById('checkoutPaymentTriggerButton').textContent = `Pay $${cost} Now ✦`;
+    }
+
+    function proceedToCheckoutPaymentTab() {
+      if (!document.getElementById('orderCategory').value) {
+        alert("Please select a service category first.");
+        return;
+      }
+      showTab('payment');
+    }
+
+    function switchLocalPayMethod(m) {
+      document.querySelectorAll('.pay-method').forEach(b => b.classList.remove('active'));
+      ['card','paypal','crypto'].forEach(id => document.getElementById(`${id}Method`).style.display = 'none');
+      document.getElementById(`pm-${m}`).classList.add('active');
+      document.getElementById(`${m}Method`).style.display = 'block';
+    }
+
+    function togglePaymentInterface(open) {
+      document.getElementById('paymentEngineModal').style.display = open ? 'flex' : 'none';
+    }
+
+    function triggerOpenGatewayModalInvoice() {
+      if (!document.getElementById('orderCategory').value) {
+        alert("Please select a service category first.");
+        showTab('place');
+        return;
+      }
+      const category = document.getElementById('orderCategory').value;
+      const specific = document.getElementById('orderService').value;
+      const combined = specific ? `${category} - ${specific}` : category;
+      const radio = document.querySelector('input[name="tier"]:checked');
+      const cost = radio ? radio.getAttribute('data-price') : "79";
+      document.getElementById('modalSummaryService').textContent = combined;
+      document.getElementById('modalSummaryPrice').textContent = `$${cost} USD`;
+      document.getElementById('payCardName').value = document.getElementById('billingCardName').value || sessionName;
+      togglePaymentInterface(true);
+    }
+
+    async function executeDatabaseOrderInsertionPipeline(event) {
+      event.preventDefault();
+
+      const category = document.getElementById('orderCategory').value;
+      const specific = document.getElementById('orderService').value || 'General';
+      const radio = document.querySelector('input[name="tier"]:checked');
+
+      // FIX: Guard against missing radio (shouldn't happen but prevents crash)
+      if (!radio) { alert("Please select a pricing tier."); return; }
+
+      const payload = {
+        serviceType: `${category} (${specific})`,
+        tierPlan: radio.value,
+        baseCost: parseFloat(radio.getAttribute('data-price')),
+        formatSpecs: document.getElementById('orderSpecs').value || "Standard High-Res (PNG/JPEG)",
+        briefNotes: document.getElementById('orderDescription').value || "No notes provided.",
+        customerEmail: sessionEmail,   // already normalized at top of script
+        status: 'Pending'
+      };
+
+      try {
+        const res = await fetch('/api/orders/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          togglePaymentInterface(false);
+          document.getElementById('confirmOverlay').classList.remove('hidden');
+        } else {
+          alert("Order failed: " + (data.message || "Unknown error"));
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Network error. Check server is running.");
+      }
+    }
+
+    function dismissOverlayAndTrack() {
+      document.getElementById('confirmOverlay').classList.add('hidden');
+      document.getElementById('orderCategory').value = "";
+      document.getElementById('orderService').innerHTML = '<option value="">Select category first...</option>';
+      document.getElementById('orderSpecs').value = "";
+      document.getElementById('orderDescription').value = "";
+      calculateFormTotals();
+      showTab('track');
+    }
+
+    async function queryActiveUserCollectionRecords() {
+      const container = document.getElementById('dynamicOrdersCollectionContainer');
+      if (!container) return;
+      container.innerHTML = '<p style="padding:20px;color:var(--muted)">Loading orders...</p>';
+
+      try {
+        // FIX: sessionEmail is now guaranteed lowercase — query will match MongoDB records
+        const res = await fetch(`/api/orders?email=${encodeURIComponent(sessionEmail)}&role=${sessionRole}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const orders = await res.json();
+
+        if (!orders || orders.length === 0) {
+          container.innerHTML = `
+            <div style="text-align:center;padding:40px;background:#f8fafc;border-radius:12px;border:2px dashed #e2e8f0;">
+              <p style="margin:0;color:var(--muted);font-size:14px;">No orders yet. Place your first order above!</p>
+            </div>`;
+          return;
+        }
+
+        container.innerHTML = "";
+        orders.forEach(order => {
+          const typeString = order.serviceType || '';
+          const status = order.status || 'Pending';
+
+          let icon = "🎨";
+          if (typeString.includes('3D')) icon = "📐";
+          if (typeString.includes('Novel')) icon = "📖";
+          if (typeString.includes('Graphic')) icon = "🏪";
+
+          let progressPct = 15, colorGrad = "linear-gradient(90deg,#fbbf24,#f59e0b)";
+          const sl = status.toLowerCase();
+          if (sl === 'in progress' || sl === 'processing') { progressPct = 65; colorGrad = "linear-gradient(90deg,#c084d4,#85aef7)"; }
+          else if (sl === 'completed') { progressPct = 100; colorGrad = "linear-gradient(90deg,#10b981,#34d399)"; }
+
+          let actionBtn = `<button style="opacity:0.6;cursor:not-allowed;background:#e2e8f0;border:none;padding:6px 12px;border-radius:6px;" disabled>View Details</button>`;
+          if (sl === 'pending') actionBtn = `<button style="background:#fee2e2;color:#ef4444;border:none;padding:6px 12px;border-radius:6px;font-weight:600;cursor:pointer;" onclick="deleteTargetDatabaseDocumentRecord('${order._id}')">Cancel</button>`;
+          else if (sl === 'completed') actionBtn = `<button style="background:#e0f2fe;color:#0369a1;border:none;padding:6px 12px;border-radius:6px;font-weight:600;cursor:pointer;" onclick="showTab('review')">Leave Review</button>`;
+
+          const row = document.createElement('div');
+          row.className = 'order-row';
+          row.innerHTML = `
+            <div class="order-icon" style="background:#f1f5f9">${icon}</div>
+            <div class="order-info" style="flex:1;margin-left:15px;">
+              <div style="font-weight:600;color:#1e293b;">${typeString}</div>
+              <div style="font-size:12px;color:var(--muted);margin:2px 0 6px;">Tier: ${order.tierPlan || 'Standard'} · Format: ${order.formatSpecs || 'N/A'}</div>
+              <div style="font-size:12px;color:#475569;font-style:italic;margin-bottom:8px;">"${order.briefNotes || ''}"</div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="background:#e2e8f0;height:6px;border-radius:10px;width:250px;overflow:hidden;">
+                  <div style="width:${progressPct}%;height:100%;background:${colorGrad}"></div>
+                </div>
+                <span style="font-size:12px;color:var(--muted)">${status}</span>
+              </div>
+            </div>
+            <div style="text-align:right;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;">
+              <span style="padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;">$${order.baseCost || 0}</span>
+              <div style="margin-top:10px;">${actionBtn}</div>
+            </div>`;
+          container.appendChild(row);
+        });
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = `<p style="padding:20px;color:#ef4444">Failed to load orders: ${err.message}</p>`;
+      }
+    }
+
+    async function deleteTargetDatabaseDocumentRecord(orderId) {
+      if (!confirm("Cancel and delete this order?")) return;
+      try {
+        const res = await fetch(`/api/orders/${orderId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          queryActiveUserCollectionRecords();
+        } else {
+          alert("Delete failed: " + (data.message || "Unknown error"));
+        }
+      } catch (err) {
+        alert("Network error while cancelling order.");
+      }
+    }
+
+    async function submitReviewAction() {
+      const title = document.getElementById('reviewTitle').value.trim();
+      const text = document.getElementById('reviewText').value.trim();
+      if (!title || !text) { alert("Please fill in both fields."); return; }
+      try {
+        const res = await fetch('/api/reviews', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: sessionName, role: 'Client', rating: '5', text: `${title} - ${text}` })
+        });
+        if (res.ok) {
+          alert("⭐ Review submitted!");
+          document.getElementById('reviewTitle').value = "";
+          document.getElementById('reviewText').value = "";
+          showTab('place');
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    function executeSignOutRoute() {
+      localStorage.clear();
+      window.location.href = '/login.html';
+    }
+  </script>
 </body>
 </html>

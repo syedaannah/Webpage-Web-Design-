@@ -1,306 +1,127 @@
-let pendingPayloadMetadata = null;
+// ===== TAB SWITCHING =====
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.snav').forEach(a => a.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.closest('.snav').classList.add('active');
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('📄 Orders page loading...');
-    
-    // Check session and load user info
-    checkSessionAndLoad();
+// ===== SERVICE DROPDOWN =====
+const serviceMap = {
+  '2d': ['Character Design','Background Design','Sprite Animation','UI Design','2D Environment Design'],
+  '3d': ['3D Character Modeling','Environment Design','Props & Assets','Weapon Design','Vehicle Design'],
+  'illustration': ['Story Illustration','Book Cover Illustration','Comic Art','Concept Art'],
+  'graphic': ['Logo Design','Business Card Design','Brochure Design','Poster Design','Social Media Posts','Banner Design'],
+  'merch': ['T-Shirt Design','Mug Design','Sticker Design'],
+  'book': ['Novel Cover Design','Book Layout Design','Typography Design']
+};
+
+function updateServices() {
+  const cat = document.getElementById('orderCategory').value;
+  const sel = document.getElementById('orderService');
+  sel.innerHTML = '';
+  if (!cat) { sel.innerHTML = '<option>Select category first...</option>'; return; }
+  serviceMap[cat].forEach(s => {
+    const o = document.createElement('option');
+    o.textContent = s;
+    sel.appendChild(o);
+  });
+  document.getElementById('sum-service').textContent = serviceMap[cat][0];
+}
+
+document.getElementById('orderService').addEventListener('change', function() {
+  document.getElementById('sum-service').textContent = this.value;
 });
 
-function checkSessionAndLoad() {
-    // Get session from localStorage
-    const sessionEmail = localStorage.getItem('userSessionEmail');
-    const sessionRole = localStorage.getItem('userSessionRole');
-    
-    console.log('🔍 Session check:', { email: sessionEmail, role: sessionRole });
-    
-    // If no session, redirect to login
-    if (!sessionEmail) {
-        console.log('❌ No session found, redirecting to login');
-        window.location.href = '/login.html';
-        return;
-    }
+// Update price on tier change
+document.querySelectorAll('input[name="tier"]').forEach(r => {
+  r.addEventListener('change', function() {
+    const prices = { basic: '$29', standard: '$79', pro: '$149' };
+    const days = { basic: '7 days', standard: '5 days', pro: '3 days' };
+    const revs = { basic: '2', standard: '5', pro: 'Unlimited' };
+    document.getElementById('sum-price').textContent = prices[this.value];
+    document.getElementById('sum-tier').textContent = this.value.charAt(0).toUpperCase() + this.value.slice(1);
+  });
+});
 
-    // UPDATE SIDEBAR PROFILE - NOW USES ACTUAL NAME FROM REGISTRATION!
-    const profileNameEl = document.getElementById('userProfileName');
-    const profileEmailEl = document.getElementById('userProfileEmail');
-    const avatarEl = document.getElementById('userAvatarPlaceholder');
-    
-    // Try to get the saved user name, fallback to email if not found
-    const savedUserName = localStorage.getItem('userName') || sessionEmail.split('@')[0];
-    
-    if (profileNameEl) {
-        // Display the actual name entered during registration (or email part as fallback)
-        profileNameEl.textContent = savedUserName;
-        console.log('✓ Updated profile name:', profileNameEl.textContent);
-    }
-    
-    if (profileEmailEl) {
-        profileEmailEl.textContent = sessionEmail;
-        console.log('✓ Updated profile email:', profileEmailEl.textContent);
-    }
-    
-    if (avatarEl) {
-        // Show first letter of actual name in avatar
-        const firstLetter = savedUserName.charAt(0).toUpperCase();
-        avatarEl.textContent = firstLetter;
-        console.log('✓ Updated avatar with:', firstLetter);
-    }
-
-    // Extract values from pricing/service selection
-    const svc = localStorage.getItem('intendedServiceSelection') || "Character Design Architecture";
-    const tier = localStorage.getItem('selectedTierName') || "Standard Tier Plan";
-    const price = localStorage.getItem('selectedTierCost') || "79";
-
-    const serviceInput = document.getElementById('orderServiceType');
-    const tierInput = document.getElementById('orderTierPlan');
-    const costInput = document.getElementById('orderBaseCost');
-    
-    if (serviceInput) serviceInput.value = svc;
-    if (tierInput) tierInput.value = tier;
-    if (costInput) costInput.value = `$${price}`;
-
-    // Load active orders from MongoDB
-    console.log('📊 Fetching orders for:', sessionEmail);
-    pullLiveClientOrdersFromDatabase();
+// ===== PAYMENT METHODS =====
+function setMethod(btn, method) {
+  document.querySelectorAll('.pay-method').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cardMethod').style.display = method === 'card' ? 'block' : 'none';
+  document.getElementById('paypalMethod').style.display = method === 'paypal' ? 'block' : 'none';
+  document.getElementById('cryptoMethod').style.display = method === 'crypto' ? 'block' : 'none';
 }
 
-// Show/hide tabs
-function showTab(tabName) {
-    // Hide all tabs
-    document.querySelectorAll('.tab-content').forEach(el => {
-        el.classList.remove('active');
+function formatCard(input) {
+  let val = input.value.replace(/\D/g, '').substring(0, 16);
+  val = val.replace(/(.{4})/g, '$1 ').trim();
+  input.value = val;
+  const display = val || '•••• •••• •••• ••••';
+  document.getElementById('cardNumDisplay').textContent = display;
+}
+
+function processPayment() {
+  const btn = document.querySelector('#tab-payment .btn-auth');
+  btn.textContent = 'Processing...';
+  btn.disabled = true;
+  setTimeout(() => {
+    document.getElementById('confirmOverlay').classList.remove('hidden');
+    btn.textContent = 'Pay $79 Now ✦';
+    btn.disabled = false;
+  }, 1800);
+}
+
+function connectMetaMask() {
+  if (typeof window.ethereum !== 'undefined') {
+    window.ethereum.request({ method: 'eth_requestAccounts' })
+      .then(accounts => alert('Wallet connected: ' + accounts[0]))
+      .catch(err => alert('Connection rejected.'));
+  } else {
+    alert('MetaMask not detected. Please install the MetaMask extension.');
+  }
+}
+
+// ===== CANCEL ORDER =====
+function cancelOrder(btn) {
+  if (confirm('Are you sure you want to cancel this order?')) {
+    const row = btn.closest('.order-row');
+    row.style.opacity = '0.4';
+    row.querySelector('.status-badge').textContent = 'Cancelled';
+    row.querySelector('.status-badge').className = 'status-badge';
+    row.querySelector('.status-badge').style.cssText = 'background:#fde8e8;color:#f87171;font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px';
+    btn.disabled = true;
+    btn.textContent = 'Cancelled';
+  }
+}
+
+// ===== STAR RATING =====
+const stars = document.querySelectorAll('.star');
+stars.forEach(star => {
+  star.addEventListener('click', function() {
+    const val = parseInt(this.dataset.val);
+    stars.forEach((s, i) => {
+      s.classList.toggle('active', i < val);
     });
-    
-    // Remove active from all nav links
-    document.querySelectorAll('.sidebar-nav .snav').forEach(el => {
-        el.classList.remove('active');
+  });
+  star.addEventListener('mouseover', function() {
+    const val = parseInt(this.dataset.val);
+    stars.forEach((s, i) => s.style.color = i < val ? '#f59e0b' : '#f0e6f8');
+  });
+  star.addEventListener('mouseout', function() {
+    stars.forEach(s => {
+      s.style.color = s.classList.contains('active') ? '#f59e0b' : '#f0e6f8';
     });
-    
-    // Show selected tab
-    const tabEl = document.getElementById(`tab-${tabName}`);
-    if (tabEl) {
-        tabEl.classList.add('active');
-    }
-    
-    // Mark nav link as active
-    event.target.classList.add('active');
-}
+  });
+});
 
-// Create and submit new order
-function createNewStudioOrder(event) {
-    event.preventDefault();
-    
-    const sessionEmail = localStorage.getItem('userSessionEmail');
-    if (!sessionEmail) {
-        alert("Please log in to submit an order.");
-        return;
-    }
-
-    const serviceType = document.getElementById('orderService').value || "Design Service";
-    const tierRadio = document.querySelector('input[name="tier"]:checked');
-    const tierPlan = tierRadio ? tierRadio.value : "standard";
-    const tierPrices = { basic: 29, standard: 79, pro: 149 };
-    const baseCost = tierPrices[tierPlan] || 79;
-    
-    const formatSpecs = document.querySelector('textarea')?.value || "";
-    const briefNotes = document.querySelector('textarea')?.value || "";
-
-    pendingPayloadMetadata = {
-        serviceType: serviceType,
-        tierPlan: tierPlan,
-        baseCost: baseCost,
-        formatSpecs: formatSpecs,
-        briefNotes: briefNotes,
-        customerEmail: sessionEmail,
-        status: 'Pending'
-    };
-
-    console.log('📦 Order created:', pendingPayloadMetadata);
-
-    // Show payment modal
-    const modal = document.getElementById('paymentModal');
-    if (modal) {
-        modal.style.display = 'flex';
-    }
-}
-
-// Fetch orders from MongoDB
-async function pullLiveClientOrdersFromDatabase() {
-    const sessionEmail = localStorage.getItem('userSessionEmail');
-    const sessionRole = localStorage.getItem('userSessionRole');
-    
-    if (!sessionEmail) return;
-
-    try {
-        const response = await fetch(`/api/orders?email=${sessionEmail}&role=${sessionRole}`);
-        const orders = await response.json();
-        
-        console.log('📥 Fetched orders:', orders);
-        displayOrders(orders);
-    } catch (err) {
-        console.error('Error fetching orders:', err);
-    }
-}
-
-// Display orders in table
-function displayOrders(orders) {
-    const container = document.getElementById('ordersTable') || document.querySelector('.orders-list');
-    if (!container) return;
-
-    if (!orders || orders.length === 0) {
-        container.innerHTML = '<p style="color: var(--muted); text-align: center; padding: 20px;">No orders yet. Create one above!</p>';
-        return;
-    }
-
-    let html = '<table style="width:100%; border-collapse: collapse;">';
-    html += '<tr style="border-bottom: 2px solid #c084d4;"><th>Service</th><th>Tier</th><th>Cost</th><th>Status</th><th>Action</th></tr>';
-    
-    orders.forEach(order => {
-        const status = order.status || 'Pending';
-        const statusColor = status === 'Completed' ? '#10b981' : status === 'Processing' ? '#fbbf24' : '#f87171';
-        
-        html += `<tr style="border-bottom: 1px solid #e5d9f2;">
-            <td>${order.serviceType || 'N/A'}</td>
-            <td>${order.tierPlan || 'N/A'}</td>
-            <td>$${order.baseCost || '0'}</td>
-            <td style="color: ${statusColor}; font-weight: bold;">${status}</td>
-            <td><button onclick="cancelOrder('${order._id}')" style="background: #f87171; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Cancel</button></td>
-        </tr>`;
-    });
-    
-    html += '</table>';
-    container.innerHTML = html;
-}
-
-// Cancel order
-async function cancelOrder(orderId) {
-    if (!confirm('Are you sure you want to cancel this order?')) return;
-
-    try {
-        const response = await fetch(`/api/orders/${orderId}`, {
-            method: 'DELETE'
-        });
-        
-        if (response.ok) {
-            alert('Order cancelled successfully');
-            pullLiveClientOrdersFromDatabase();
-        }
-    } catch (err) {
-        console.error('Error canceling order:', err);
-    }
-}
-
-// Process payment
-async function processPayment(method) {
-    if (!pendingPayloadMetadata) {
-        alert('No order to process');
-        return;
-    }
-
-    try {
-        const response = await fetch('/api/orders/create', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(pendingPayloadMetadata)
-        });
-
-        if (response.ok) {
-            alert(`Order placed successfully via ${method}!`);
-            
-            // Close modal
-            const modal = document.getElementById('paymentModal');
-            if (modal) modal.style.display = 'none';
-            
-            // Reset form and refresh orders
-            pendingPayloadMetadata = null;
-            document.querySelector('form')?.reset();
-            pullLiveClientOrdersFromDatabase();
-        }
-    } catch (err) {
-        console.error('Payment error:', err);
-        alert('Failed to place order');
-    }
-}
-
-// Leave review
-async function submitReview() {
-    const name = document.getElementById('reviewName')?.value;
-    const rating = document.getElementById('reviewRating')?.value;
-    const text = document.getElementById('reviewText')?.value;
-
-    if (!name || !rating || !text) {
-        alert('Please fill in all review fields');
-        return;
-    }
-
-    try {
-        const response = await fetch('/api/reviews', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, rating, text, role: 'customer' })
-        });
-
-        if (response.ok) {
-            alert('Review submitted successfully!');
-            document.getElementById('reviewName').value = '';
-            document.getElementById('reviewRating').value = '5';
-            document.getElementById('reviewText').value = '';
-        }
-    } catch (err) {
-        console.error('Review error:', err);
-    }
-}
-
-// Close payment modal
-function closePaymentModal() {
-    const modal = document.getElementById('paymentModal');
-    if (modal) modal.style.display = 'none';
-}
-
-// Update services based on category
-function updateServices() {
-    const category = document.getElementById('orderCategory').value;
-    const serviceSelect = document.getElementById('orderService');
-    
-    const services = {
-        '2d': ['Character Design', 'Game Asset Design', 'Concept Art', 'Character Animation', 'UI Design', 'Background Art', 'Sprite Sheet Design', 'Logo Animation'],
-        '3d': ['3D Character Modeling', '3D Environment Design', 'Product Visualization', 'Architectural Rendering', '3D Animation'],
-        'illustration': ['Custom Illustration', 'Book Illustration', 'Portrait Art', 'Fantasy Art'],
-        'graphic': ['Poster Design', 'Brochure Design', 'Business Card Design', 'Infographic Design', 'Social Media Graphics', 'Banner Design'],
-        'merch': ['T-Shirt Design', 'Mug Design', 'Hoodie Design'],
-        'book': ['Book Cover Design', 'Book Layout Design', 'Illustration for Books']
-    };
-    
-    serviceSelect.innerHTML = '';
-    
-    if (services[category]) {
-        services[category].forEach(service => {
-            const option = document.createElement('option');
-            option.value = service;
-            option.textContent = service;
-            serviceSelect.appendChild(option);
-        });
-    } else {
-        serviceSelect.innerHTML = '<option>Select category first...</option>';
-    }
-}
-
-// Logout - FIXED to properly clear and redirect
-function executeSignOutRoute() {
-    console.log('🔓 Logging out...');
-    
-    // Clear ALL session data
-    localStorage.removeItem('userSessionRole');
-    localStorage.removeItem('userSessionEmail');
-    localStorage.removeItem('intendedServiceSelection');
-    localStorage.removeItem('selectedTierName');
-    localStorage.removeItem('selectedTierCost');
-    
-    console.log('✓ Session cleared');
-    
-    // Redirect to login page
-    setTimeout(() => {
-        window.location.href = '/login.html';
-    }, 100);
+// ===== SUBMIT REVIEW =====
+function submitReview() {
+  const btn = document.querySelector('#tab-review .btn-primary');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = 'Review Submitted ✓';
+    btn.style.background = 'linear-gradient(135deg,#10b981,#059669)';
+  }, 1200);
 }
