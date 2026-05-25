@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Register — ArtCanvas Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+  <nav>
+    <div class="logo">✦ ArtCanvas Studio</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/portfolio.html">Portfolio</a></li>
+      <li><a href="/pricing.html">Pricing</a></li>
+      <li><a href="/orders.html">Orders</a></li>
+      <li><a href="/reviews.html">Reviews</a></li>
+      <li><a href="/about-contact.html">About Us</a></li>
+    </ul>
+    <button class="btn-nav" onclick="window.location.href='/'">← Back to Home</button>
+  </nav>
+
+  <div class="auth-wrapper">
+
+    <div class="auth-left">
+      <div class="auth-brand">
+        <div class="auth-logo">✦ ArtCanvas Studio</div>
+        <h2>Bring your creative vision to life</h2>
+        <p>Join thousands of clients who trust us with their digital art needs.</p>
+      </div>
+      <div class="auth-features">
+        <div class="auth-feat"><span class="feat-icon">🎨</span><div><strong>40+ Services</strong><p>From pixel art to 3D modeling</p></div></div>
+        <div class="auth-feat"><span class="feat-icon">⚡</span><div><strong>Fast Delivery</strong><p>Orders tracked in real-time</p></div></div>
+        <div class="auth-feat"><span class="feat-icon">⭐</span><div><strong>5-Star Quality</strong><p>98% client satisfaction rate</p></div></div>
+      </div>
+      <div class="auth-shapes">
+        <div class="as as1"></div>
+        <div class="as as2"></div>
+        <div class="as as3"></div>
+      </div>
+    </div>
+
+    <div class="auth-right">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin">Login</button>
+        <button class="auth-tab" id="tabRegister">Register</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div class="auth-form" id="loginForm">
+        <h3>Welcome back! 👋</h3>
+        <p class="form-sub">Sign in to manage your orders and projects</p>
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="your@email.com" id="loginEmail">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="pass-wrap">
+            <input type="password" placeholder="Enter your password" id="loginPass">
+            <span class="pass-toggle" onclick="togglePass('loginPass', this)">👁</span>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="checkbox-label"><input type="checkbox"> Remember me</label>
+          <a href="#" class="forgot">Forgot password?</a>
+        </div>
+        <button class="btn-auth" onclick="handleLogin()">Login to Account ✦</button>
+        <div class="divider"><span>or continue with</span></div>
+        <div class="social-btns">
+          <button class="social-btn">🌐 Google</button>
+          <button class="social-btn">🐙 GitHub</button>
+        </div>
+        <p class="switch-text">Don't have an account? <a href="#" onclick="switchTab('register')">Register here</a></p>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div class="auth-form hidden" id="registerForm">
+        <h3>Create account ✨</h3>
+        <p class="form-sub">Start your creative journey with us today</p>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="Aisha">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="Khan">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="your@email.com" id="regEmail">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="pass-wrap">
+            <input type="password" placeholder="Create a password" id="regPass">
+            <span class="pass-toggle" onclick="togglePass('regPass', this)">👁</span>
+          </div>
+          <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+          <div class="strength-label" id="strengthLabel"></div>
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" placeholder="Repeat your password">
+        </div>
+        <div class="form-group">
+          <label>Account Type</label>
+          <select>
+            <option>Client — I want to order artwork</option>
+            <option>Artist — I want to offer services</option>
+          </select>
+        </div>
+        <label class="checkbox-label" style="margin-bottom:16px">
+          <input type="checkbox"> I agree to the <a href="#">Terms & Conditions</a>
+        </label>
+        <button class="btn-auth" onclick="handleRegister()">Create Account ✦</button>
+        <p class="switch-text">Already have an account? <a href="#" onclick="switchTab('login')">Login here</a></p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+</body>
+</html>

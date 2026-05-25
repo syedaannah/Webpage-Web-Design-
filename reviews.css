@@ -1,0 +1,29 @@
+/* ===== REVIEWS INTERFACE STYLING MODULE ===== */
+.nav-active {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+.reviews-feedback-section {
+  background: var(--soft);
+}
+
+.form-title-heading {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--txt);
+}
+
+.feed-title-heading {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--txt);
+}
+
+.reviews-stack-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders — ArtCanvas Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="orders.css">
+</head>
+<body>
+
+  <nav>
+    <div class="logo">✦ ArtCanvas Studio</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="orders.html" style="color:#c084d4;font-weight:600">Orders</a></li>
+      <li><a href="index.html#reviews">Reviews</a></li>
+    </ul>
+    <a href="auth.html"><button class="btn-nav">👤 My Account</button></a>
+  </nav>
+
+  <div class="orders-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="orders-sidebar">
+      <div class="sidebar-profile">
+        <!-- FIXED: Aisha Khan references removed entirely. Added dynamic placeholder tracking hooks -->
+        <div class="profile-avatar" id="userAvatarPlaceholder">??</div>
+        <div>
+          <div class="profile-name" id="userProfileName">Loading User...</div>
+          <div class="profile-email" id="userProfileEmail">No active session</div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="snav active" onclick="showTab('place')">🎨 Place Order</a>
+        <a href="#" class="snav" onclick="showTab('track')">📦 My Orders</a>
+        <a href="#" class="snav" onclick="showTab('payment')">💳 Payment</a>
+        <a href="#" class="snav" onclick="showTab('review')">⭐ Leave Review</a>
+        <button class="btn-nav" onclick="executeSignOutRoute()">Logout ✦</button>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="orders-main">
+
+      <!-- PLACE ORDER -->
+      <div class="tab-content active" id="tab-place">
+        <div class="page-header">
+          <div>
+            <div class="section-label">New Order</div>
+            <div class="section-title" style="margin-bottom:4px">Place an Order</div>
+            <p style="color:var(--muted);font-size:14px">Fill in the details and we'll get started right away</p>
+          </div>
+        </div>
+
+        <div class="order-form-grid">
+          <div class="order-form-card">
+            <h4>Order Details</h4>
+            <div class="form-group">
+              <label>Service Category</label>
+              <select id="orderCategory" onchange="updateServices()">
+                <option value="">Select category...</option>
+                <option value="2d">2D Art & Game Design</option>
+                <option value="3d">3D Art & Modeling</option>
+                <option value="illustration">Illustration Services</option>
+                <option value="graphic">Graphic Design</option>
+                <option value="merch">Merchandise Design</option>
+                <option value="book">Novel & Book Design</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Specific Service</label>
+              <select id="orderService">
+                <option>Select category first...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Pricing Tier</label>
+              <div class="tier-cards">
+                <label class="tier-card">
+                  <input type="radio" name="tier" value="basic"> 
+                  <div><strong>Basic</strong><span>$29</span></div>
+                </label>
+                <label class="tier-card">
+                  <input type="radio" name="tier" value="standard" checked>
+                  <div><strong>Standard</strong><span>$79</span></div>
+                </label>
+                <label class="tier-card">
+                  <input type="radio" name="tier" value="pro">
+                  <div><strong>Pro</strong><span>$149</span></div>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Project Description</label>
+              <textarea rows="4" placeholder="Describe your project in detail — style, colors, references, mood..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Reference Files (optional)</label>
+              <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                <input type="file" id="fileInput" style="display:none" multiple>
+                <span style="font-size:28px">📎</span>
+                <p>Click to upload references</p>
+                <small>PNG, JPG, PDF up to 10MB</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Deadline</label>
+              <input type="date" id="deadline">
+            </div>
+            <button class="btn-primary" style="width:100%;margin-top:8px" onclick="showTab('payment')">Continue to Payment ✦</button>
+          </div>
+
+          <div class="order-summary">
+            <div class="summary-card">
+              <h4>Order Summary</h4>
+              <div class="summary-row"><span>Service</span><span id="sum-service">—</span></div>
+              <div class="summary-row"><span>Tier</span><span id="sum-tier">Standard</span></div>
+              <div class="summary-row"><span>Delivery</span><span>5 days</span></div>
+              <div class="summary-row"><span>Revisions</span><span>5 included</span></div>
+              <div class="summary-divider"></div>
+              <div class="summary-row total"><span>Total</span><span id="sum-price">$79</span></div>
+            </div>
+            <div class="summary-card" style="margin-top:16px">
+              <h4>What's Included</h4>
+              <ul class="include-list">
+                <li>✓ Source files (PSD/AI)</li>
+                <li>✓ All common formats</li>
+                <li>✓ Commercial license</li>
+                <li>✓ Dedicated support</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MY ORDERS / TRACK -->
+      <div class="tab-content" id="tab-track">
+        <div class="page-header">
+          <div>
+            <div class="section-label">Order History</div>
+            <div class="section-title" style="margin-bottom:4px">My Orders</div>
+          </div>
+          <div class="filter-btns" style="margin-bottom:0">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Pending</button>
+            <button class="filter-btn">In Progress</button>
+            <button class="filter-btn">Completed</button>
+          </div>
+        </div>
+
+        <div class="orders-list">
+
+          <div class="order-row">
+            <div class="order-icon" style="background:#fde8f0">🧚</div>
+            <div class="order-info">
+              <div class="order-name">Fantasy Character Design</div>
+              <div class="order-meta">2D Art · Standard · Placed 3 days ago</div>
+              <div class="order-progress">
+                <div class="progress-bar"><div class="progress-fill" style="width:65%;background:linear-gradient(90deg,#c084d4,#85aef7)"></div></div>
+                <span>65% complete</span>
+              </div>
+            </div>
+            <div class="order-right">
+              <span class="status-badge status-progress">In Progress</span>
+              <div class="order-price">$79</div>
+              <button class="btn-sm" onclick="alert('Order details would open here')">View Details</button>
+            </div>
+          </div>
+
+          <div class="order-row">
+            <div class="order-icon" style="background:#eef8e8">🏪</div>
+            <div class="order-info">
+              <div class="order-name">Brand Logo Design</div>
+              <div class="order-meta">Graphic Design · Pro · Placed 10 days ago</div>
+              <div class="order-progress">
+                <div class="progress-bar"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,#10b981,#34d399)"></div></div>
+                <span>Delivered</span>
+              </div>
+            </div>
+            <div class="order-right">
+              <span class="status-badge status-done">Completed</span>
+              <div class="order-price">$149</div>
+              <button class="btn-sm" onclick="showTab('review')">Leave Review</button>
+            </div>
+          </div>
+
+          <div class="order-row">
+            <div class="order-icon" style="background:#e8f0fe">📖</div>
+            <div class="order-info">
+              <div class="order-name">Book Cover Illustration</div>
+              <div class="order-meta">Illustration · Basic · Placed 1 day ago</div>
+              <div class="order-progress">
+                <div class="progress-bar"><div class="progress-fill" style="width:10%;background:linear-gradient(90deg,#fbbf24,#f59e0b)"></div></div>
+                <span>Just started</span>
+              </div>
+            </div>
+            <div class="order-right">
+              <span class="status-badge status-pending">Pending</span>
+              <div class="order-price">$29</div>
+              <button class="btn-sm danger" onclick="cancelOrder(this)">Cancel</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PAYMENT -->
+      <div class="tab-content" id="tab-payment">
+        <div class="page-header">
+          <div>
+            <div class="section-label">Checkout</div>
+            <div class="section-title" style="margin-bottom:4px">Dummy Payment</div>
+            <p style="color:var(--muted);font-size:14px">This is a simulated payment interface</p>
+          </div>
+        </div>
+
+        <div class="payment-grid">
+          <div class="payment-form-card">
+            <div class="pay-methods">
+              <button class="pay-method active" onclick="setMethod(this,'card')">💳 Card</button>
+              <button class="pay-method" onclick="setMethod(this,'paypal')">🅿️ PayPal</button>
+              <button class="pay-method" onclick="setMethod(this,'crypto')">🦊 MetaMask</button>
+            </div>
+
+            <div id="cardMethod">
+              <div class="card-preview">
+                <div class="card-chip">▪▪▪</div>
+                <div class="card-number" id="cardNumDisplay">•••• •••• •••• ••••</div>
+                <div class="card-bottom">
+                  <span id="cardNameDisplay">YOUR NAME</span>
+                  <span id="cardExpDisplay">MM/YY</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <!-- FIXED: Changed static input placeholders to safe general prompts -->
+                <label>Cardholder Name</label>
+                <input type="text" placeholder="Your Name" oninput="document.getElementById('cardNameDisplay').textContent=this.value||'YOUR NAME'">
+              </div>
+              <div class="form-group">
+                <label>Card Number</label>
+                <input type="text" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)">
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>Expiry</label>
+                  <input type="text" placeholder="MM/YY" maxlength="5" oninput="document.getElementById('cardExpDisplay').textContent=this.value||'MM/YY'">
+                </div>
+                <div class="form-group">
+                  <label>CVV</label>
+                  <input type="password" placeholder="•••" maxlength="3">
+                </div>
+              </div>
+            </div>
+
+            <div id="paypalMethod" style="display:none;text-align:center;padding:32px 0">
+              <div style="font-size:48px;margin-bottom:12px">🅿️</div>
+              <p style="color:var(--muted)">You'll be redirected to PayPal to complete the payment.</p>
+            </div>
+
+            <div id="cryptoMethod" style="display:none;text-align:center;padding:32px 0">
+              <div style="font-size:48px;margin-bottom:12px">🦊</div>
+              <p style="color:var(--muted);margin-bottom:16px">Connect your MetaMask wallet to pay with ETH.</p>
+              <button class="btn-primary" style="width:auto;padding:10px 28px" onclick="connectMetaMask()">Connect Wallet</button>
+            </div>
+
+            <button class="btn-auth" onclick="processPayment()" style="margin-top:16px">Pay $79 Now ✦</button>
+          </div>
+
+          <div class="payment-summary">
+            <div class="summary-card">
+              <h4>Order Summary</h4>
+              <div class="summary-row"><span>Fantasy Character Design</span><span>$79</span></div>
+              <div class="summary-row"><span>Standard Tier</span><span>—</span></div>
+              <div class="summary-row"><span>Processing fee</span><span>$0</span></div>
+              <div class="summary-divider"></div>
+              <div class="summary-row total"><span>Total Due</span><span>$79</span></div>
+            </div>
+            <div class="secure-badge">🔒 Secured by 256-bit SSL encryption</div>
+          </div>
+        </div>
+
+        <!-- CONFIRMATION (hidden) -->
+        <div class="confirm-overlay hidden" id="confirmOverlay">
+          <div class="confirm-box">
+            <div style="font-size:60px;margin-bottom:16px">🎉</div>
+            <h3>Payment Successful!</h3>
+            <p>Your order has been placed. Order ID: <strong>#ACS-2847</strong></p>
+            <p style="color:var(--muted);font-size:13px;margin-top:8px">You'll receive a confirmation email shortly.</p>
+            <button class="btn-primary" style="margin-top:24px" onclick="showTab('track')">Track My Order ✦</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEAVE REVIEW -->
+      <div class="tab-content" id="tab-review">
+        <div class="page-header">
+          <div>
+            <div class="section-label">Feedback</div>
+            <div class="section-title" style="margin-bottom:4px">Leave a Review</div>
+          </div>
+        </div>
+        <div class="review-form-card">
+          <div class="form-group">
+            <label>Which order are you reviewing?</label>
+            <select>
+              <option>Brand Logo Design — Completed</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Your Rating</label>
+            <div class="star-rating" id="starRating">
+              <span class="star" data-val="1">★</span>
+              <span class="star" data-val="2">★</span>
+              <span class="star" data-val="3">★</span>
+              <span class="star" data-val="4">★</span>
+              <span class="star" data-val="5">★</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Review Title</label>
+            <input type="text" placeholder="e.g. Amazing work!">
+          </div>
+          <div class="form-group">
+            <label>Your Review</label>
+            <textarea rows="5" placeholder="Tell others about your experience..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Would you recommend us?</label>
+            <div class="radio-group">
+              <label class="checkbox-label"><input type="radio" name="recommend" checked> Yes, definitely!</label>
+              <label class="checkbox-label"><input type="radio" name="recommend"> Maybe</label>
+              <label class="checkbox-label"><input type="radio" name="recommend"> No</label>
+            </div>
+          </div>
+          <button class="btn-primary" style="width:100%" onclick="submitReview()">Submit Review ✦</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="orders.js"></script>
+
+<div class="payment-modal-overlay" id="paymentEngineModal">
+  <div class="payment-modal-card">
+    <div class="payment-accent-bar"></div>
+    <h3>✦ Secure Secure Checkout Pipeline</h3>
+    <p style="font-size:12px; color:var(--muted); margin-bottom: 20px;">Complete fake transaction sequence parameters to log invoice dataset records.</p>
+    
+    <div class="payment-invoice-summary">
+      <div>Project Configuration: <strong id="modalSummaryService">-</strong></div>
+      <div>Grand Value Total: <strong id="modalSummaryPrice" style="color:var(--accent)">-</strong></div>
+    </div>
+
+    <form id="dummyPaymentGatewayForm" onsubmit="processDummyCheckoutPayment(event)">
+      <div class="form-group" style="text-align:left;">
+        <label>Cardholder Identification Name</label>
+        <!-- FIXED: Updated identifying placeholder values to default prompts -->
+        <input type="text" id="payCardName" placeholder="Cardholder Name" required>
+      </div>
+      <div class="form-group" style="text-align:left;">
+        <label>Dummy Card Architecture Token</label>
+        <input type="text" placeholder="4242 •••• •••• 4242" maxlength="16" required>
+      </div>
+      <div class="form-row-2" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; text-align:left;">
+        <div class="form-group">
+          <label>Expiry Date</label>
+          <input type="text" placeholder="MM/YY" maxlength="5" required>
+        </div>
+        <div class="form-group">
+          <label>Security Code (CVC)</label>
+          <input type="password" placeholder="•••" maxlength="3" required>
+        </div>
+      </div>
+      
+      <div style="display:flex; gap:12px; margin-top:20px;">
+        <button type="button" class="btn-cancel-pay" onclick="togglePaymentInterface(false)">Abort Gateway</button>
+        <button type="submit" class="btn-submit-pay">Execute Remittance ✦</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

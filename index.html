@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArtCanvas Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Service card image fixes */
+    .svc-icon {
+      width: 100%;
+      height: 160px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin: 0 auto 14px;
+      background-size: cover !important;
+      background-position: center !important;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">✦ ArtCanvas Studio</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/portfolio.html">Portfolio</a></li>
+      <li><a href="/pricing.html">Pricing</a></li>
+      <li><a href="/orders.html">Orders</a></li>
+      <li><a href="/reviews.html">Reviews</a></li>
+      <li><a href="/about-contact.html">About Us</a></li>
+      <li><a href="/about-contact.html#contact">Contact Us</a></li>
+    </ul>
+    <button class="btn-nav" onclick="window.location.href='/login.html'">Login ✦</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="floating-shapes">
+      <div class="shape" style="width:120px;height:120px;background:#f9c6d0;top:10%;left:5%"></div>
+      <div class="shape" style="width:80px;height:80px;background:#d4b8f0;top:20%;right:8%"></div>
+      <div class="shape" style="width:60px;height:60px;background:#b8d4f0;bottom:15%;left:12%"></div>
+      <div class="shape" style="width:100px;height:100px;background:#b8f0d4;bottom:10%;right:5%"></div>
+    </div>
+    <div class="hero-badge">🎨 Professional Digital Art Studio</div>
+    <h1>Where Art Meets<br>Digital Creativity</h1>
+    <p>From pixel art to 3D modeling, brand design to book covers — we bring your vision to life with passion and precision.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="window.location.href='/services.html'">Explore Services ✦</button>
+      <button class="btn-outline" onclick="window.location.href='/portfolio.html'">View Portfolio →</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-lbl">Projects Done</div></div>
+      <div class="stat"><div class="stat-num">98%</div><div class="stat-lbl">Happy Clients</div></div>
+      <div class="stat"><div class="stat-num">40+</div><div class="stat-lbl">Art Services</div></div>
+      <div class="stat"><div class="stat-num">5★</div><div class="stat-lbl">Average Rating</div></div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section style="background:#fff">
+    <div class="section-label">What We Offer</div>
+    <div class="section-title">Our Creative Services</div>
+    <div class="section-sub">Handcrafted digital art across every category you need</div>
+    <div class="services-grid">
+      <div class="svc-card">
+        <div class="svc-icon" style="background-image: url('2d.jpg');"></div>
+        <div class="svc-title">2D Art & Game Design</div>
+        <div class="svc-count">8 services · Pixel, Anime, Cartoon</div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon" style="background-image: url('3d.png');"></div>
+        <div class="svc-title">3D Art & Modeling</div>
+        <div class="svc-count">5 services · Characters, Props</div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon" style="background-image: url('illustration.png');"></div>
+        <div class="svc-title">Illustration Services</div>
+        <div class="svc-count">4 services · Story, Comic, Concept</div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon" style="background-image: url('graphic des.png');"></div>
+        <div class="svc-title">Graphic Design</div>
+        <div class="svc-count">6 services · Logo, Branding, Social</div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon" style="background-image: url('merch.png');"></div>
+        <div class="svc-title">Merchandise Design</div>
+        <div class="svc-count">3 services · T-Shirt, Mug, Sticker</div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon" style="background-image: url('book des.png');"></div>
+        <div class="svc-title">Novel & Book Design</div>
+        <div class="svc-count">3 services · Cover, Layout, Typography</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO PREVIEW -->
+  <section style="background:var(--soft)">
+    <div class="section-label">Our Work</div>
+    <div class="section-title">Portfolio Showcase</div>
+    <div class="section-sub">A glimpse of our recent creative projects</div>
+    <div class="filter-btns">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="2d">2D Art</button>
+      <button class="filter-btn" data-filter="3d">3D</button>
+      <button class="filter-btn" data-filter="illustration">Illustration</button>
+      <button class="filter-btn" data-filter="graphic">Graphic Design</button>
+    </div>
+    <div class="portfolio-grid">
+      <div class="port-card" data-cat="2d"><div class="port-img" style="background-image: url('fantasy char.png'); background-size: cover; background-position: center;"></div><div class="port-overlay"><div class="port-info"><div class="port-name">Fantasy Character</div><div class="port-cat-lbl">2D Art · Anime Style</div></div></div></div>
+      <div class="port-card" data-cat="2d"><div class="port-img" style="background-image: url('cyberpunk city.png'); background-size: cover; background-position: center;"></div><div class="port-overlay"><div class="port-info"><div class="port-name">Cyberpunk City</div><div class="port-cat-lbl">2D · Background Design</div></div></div></div>
+      <div class="port-card" data-cat="3d"><div class="port-img" style="background-image: url('dragon model.png'); background-size: cover; background-position: center;"></div><div class="port-overlay"><div class="port-info"><div class="port-name">Dragon Model</div><div class="port-cat-lbl">3D · Character Modeling</div></div></div></div>
+      <div class="port-card" data-cat="illustration"><div class="port-img" style="background-image: url('book des.png'); background-size: cover; background-position: center;"></div><div class="port-overlay"><div class="port-info"><div class="port-name">Book Cover</div><div class="port-cat-lbl">Illustration · Book Cover</div></div></div></div>
+      <div class="port-card" data-cat="graphic"><div class="port-img" style="background-image: url('brand id.png'); background-size: cover; background-position: center;"></div><div class="port-overlay"><div class="port-info"><div class="port-name">Brand Identity</div><div class="port-cat-lbl">Graphic Design · Logo</div></div></div></div>
+      <div class="port-card" data-cat="illustration"><div class="port-img" style="background-image: url('concept art.jpg'); background-size: cover; background-position: center;"></div><div class="port-overlay"><div class="port-info"><div class="port-name">Concept Art</div><div class="port-cat-lbl">Illustration · Concept</div></div></div></div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section style="background:#fff">
+    <div class="section-label">Pricing Plans</div>
+    <div class="section-title">Simple, Transparent Pricing</div>
+    <div class="section-sub">Choose the plan that fits your creative needs</div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier" style="color:#85aef7">Basic</div>
+        <div class="price-amt" style="color:#85aef7">$29<span>/project</span></div>
+        <div class="price-desc">Perfect for simple artwork needs</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>1 art piece</li>
+          <li><span class="check">✓</span>2 revisions</li>
+          <li><span class="check">✓</span>PNG/JPEG delivery</li>
+          <li><span class="check">✓</span>7-day delivery</li>
+        </ul>
+        <button class="btn-price" onclick="window.location.href='/pricing.html'">Get Started</button>
+      </div>
+      <div class="price-card featured">
+        <div class="popular-badge">Most Popular ✦</div>
+        <div class="price-tier" style="color:#c084d4">Standard</div>
+        <div class="price-amt" style="color:#c084d4">$79<span>/project</span></div>
+        <div class="price-desc">Ideal for professional projects</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>3 art pieces</li>
+          <li><span class="check">✓</span>5 revisions</li>
+          <li><span class="check">✓</span>All file formats</li>
+          <li><span class="check">✓</span>Source files included</li>
+          <li><span class="check">✓</span>5-day delivery</li>
+        </ul>
+        <button class="btn-price featured-btn" onclick="window.location.href='/pricing.html'">Get Standard</button>
+      </div>
+      <div class="price-card">
+        <div class="price-tier" style="color:#10b981">Pro</div>
+        <div class="price-amt" style="color:#10b981">$149<span>/project</span></div>
+        <div class="price-desc">For studios and agencies</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>Unlimited art pieces</li>
+          <li><span class="check">✓</span>Unlimited revisions</li>
+          <li><span class="check">✓</span>All formats + PSD</li>
+          <li><span class="check">✓</span>Priority support</li>
+          <li><span class="check">✓</span>Commercial license</li>
+        </ul>
+        <button class="btn-price" style="border-color:#10b981;color:#10b981" onclick="window.location.href='/pricing.html'">Get Pro</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section style="background:var(--soft)">
+    <div class="section-label">Testimonials</div>
+    <div class="section-title">What Clients Say</div>
+    <div class="section-sub">Real reviews from real clients who love our work</div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <div class="review-text">"Absolutely stunning character design! The artist captured every detail I imagined. Exceeded all expectations."</div>
+        <div class="reviewer">
+          <div class="avatar" style="background:linear-gradient(135deg,#c084d4,#85aef7)">AM</div>
+          <div><div class="rev-name">Aisha Malik</div><div class="rev-role">Game Developer</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <div class="review-text">"My book cover looks like it belongs on a bestseller shelf. Professional, fast, and so creative!"</div>
+        <div class="reviewer">
+          <div class="avatar" style="background:linear-gradient(135deg,#f9c6d0,#f0e6b8)">SR</div>
+          <div><div class="rev-name">Sarah Raza</div><div class="rev-role">Author</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <div class="review-text">"The logo design is perfect for our brand. Clean, memorable, and delivered in just 3 days. Highly recommended!"</div>
+        <div class="reviewer">
+          <div class="avatar" style="background:linear-gradient(135deg,#b8f0d4,#b8d4f0)">KA</div>
+          <div><div class="rev-name">Khalid Ahmed</div><div class="rev-role">Business Owner</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section style="background:#fff">
+    <div class="section-label">Get In Touch</div>
+    <div class="section-title">Contact Us</div>
+    <div class="section-sub">We'd love to hear about your creative project</div>
+    <div class="contact-wrap">
+      <div class="contact-info">
+        <h3>Let's create something<br>beautiful together ✨</h3>
+        <p class="contact-intro">Have a project in mind? Reach out and our team will get back to you within 24 hours.</p>
+        <div class="contact-detail"><div class="contact-icon" style="background:#fde8f0">📍</div><span>123 Art Street, Creative District, Islamabad, Pakistan</span></div>
+        <div class="contact-detail"><div class="contact-icon" style="background:#e8f0fe">✉️</div><span>hello@artcanvasstudio.com</span></div>
+        <div class="contact-detail"><div class="contact-icon" style="background:#eef8e8">📞</div><span>+92 300 1234567</span></div>
+        <div class="map-placeholder">🗺️ Google Maps Placeholder</div>
+      </div>
+      <div class="contact-form">
+        <div class="form-group"><label>Your Name</label><input type="text" id="contactNameInput" placeholder="e.g. Your Name"></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="contactEmailInput" placeholder="your@email.com"></div>
+        <div class="form-group">
+          <label>Service Needed</label>
+          <select>
+            <option>Select a service...</option>
+            <option>2D Art & Game Design</option>
+            <option>3D Modeling</option>
+            <option>Illustration</option>
+            <option>Graphic Design</option>
+            <option>Merchandise Design</option>
+            <option>Book Design</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Your Message</label><textarea rows="4" placeholder="Tell us about your project..."></textarea></div>
+        <button class="btn-submit" id="contactBtn">Send Message ✦</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo">✦ ArtCanvas Studio</div>
+    <p>Turning imagination into digital masterpieces, one pixel at a time.</p>
+    <div class="footer-links">
+      <a href="/">Home</a><a href="/services.html">Services</a><a href="/portfolio.html">Portfolio</a>
+      <a href="/pricing.html">Pricing</a><a href="/orders.html">Orders</a><a href="/reviews.html">Reviews</a>
+      <a href="/about-contact.html">About Us</a><a href="/about-contact.html#contact">Contact</a>
+    </div>
+    <div class="footer-bottom">© 2026 ArtCanvas Studio · All rights reserved · Made with 🎨</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

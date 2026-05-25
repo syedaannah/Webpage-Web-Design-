@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio - ArtCanvas Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <div class="logo">✦ ArtCanvas Studio</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/services.html">Services</a></li>
+      <li><a href="/portfolio.html" style="color:var(--accent); font-weight:600;">Portfolio</a></li>
+      <li><a href="/pricing.html">Pricing</a></li>
+      <li><a href="/orders.html">Orders</a></li>
+      <li><a href="/reviews.html">Reviews</a></li>
+      <li><a href="/about-contact.html">About Us</a></li>
+      <li><a href="/about-contact.html#contact">Contact Us</a></li>
+    </ul>
+    <button class="btn-nav" onclick="window.location.href='/login.html'">Login ✦</button>
+  </nav>
+
+  <!-- PORTFOLIO GALLERY -->
+  <section style="background:var(--soft); padding: 80px 40px;">
+    <div class="section-label">Our Work</div>
+    <div class="section-title">Portfolio Showcase</div>
+    <div class="section-sub">A glimpse of our recent creative projects</div>
+    
+    <div class="filter-btns">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="2d">2D Art</button>
+      <button class="filter-btn" data-filter="3d">3D</button>
+      <button class="filter-btn" data-filter="illustration">Illustration</button>
+      <button class="filter-btn" data-filter="graphic">Graphic Design</button>
+    </div>
+    
+    <div class="portfolio-grid">
+      <!-- 2D: Fantasy Char (.png) -->
+      <div class="port-card" data-cat="2d">
+        <div class="port-img" style="background-image: url('fantasy char.png'); background-size: cover; background-position: center;"></div>
+        <div class="port-overlay">
+          <div class="port-info">
+            <div class="port-name">Fantasy Character</div>
+            <div class="port-cat-lbl">2D Art · Anime Style</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 2D: Cyberpunk City (.png) -->
+      <div class="port-card" data-cat="2d">
+        <div class="port-img" style="background-image: url('cyberpunk city.png'); background-size: cover; background-position: center;"></div>
+        <div class="port-overlay">
+          <div class="port-info">
+            <div class="port-name">Cyberpunk City</div>
+            <div class="port-cat-lbl">2D · Background Design</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 3D: Dragon Model (.png) -->
+      <div class="port-card" data-cat="3d">
+        <div class="port-img" style="background-image: url('dragon model.png'); background-size: cover; background-position: center;"></div>
+        <div class="port-overlay">
+          <div class="port-info">
+            <div class="port-name">Dragon Model</div>
+            <div class="port-cat-lbl">3D · Character Modeling</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Illustration: Book Cover (.png) -->
+      <div class="port-card" data-cat="illustration">
+        <div class="port-img" style="background-image: url('book des.png'); background-size: cover; background-position: center;"></div>
+        <div class="port-overlay">
+          <div class="port-info">
+            <div class="port-name">Book Cover</div>
+            <div class="port-cat-lbl">Illustration · Book Cover</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Graphic Design: Brand Identity (.png) -->
+      <div class="port-card" data-cat="graphic">
+        <div class="port-img" style="background-image: url('brand id.png'); background-size: cover; background-position: center;"></div>
+        <div class="port-overlay">
+          <div class="port-info">
+            <div class="port-name">Brand Identity</div>
+            <div class="port-cat-lbl">Graphic Design · Logo</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Illustration: Concept Art (.jpg) -->
+      <div class="port-card" data-cat="illustration">
+        <div class="port-img" style="background-image: url('concept art.jpg'); background-size: cover; background-position: center;"></div>
+        <div class="port-overlay">
+          <div class="port-info">
+            <div class="port-name">Concept Art</div>
+            <div class="port-cat-lbl">Illustration · Concept</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo">✦ ArtCanvas Studio</div>
+    <p>Turning imagination into digital masterpieces, one pixel at a time.</p>
+    <div class="footer-links">
+      <a href="/">Home</a><a href="/services.html">Services</a><a href="/portfolio.html">Portfolio</a>
+      <a href="/pricing.html">Pricing</a><a href="/orders.html">Orders</a><a href="/reviews.html">Reviews</a>
+      <a href="/about-contact.html">About Us</a><a href="/about-contact.html#contact">Contact</a>
+    </div>
+    <div class="footer-bottom">© 2026 ArtCanvas Studio · All rights reserved · Made with 🎨</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

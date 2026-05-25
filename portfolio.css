@@ -1,0 +1,23 @@
+/* ===== PORTFOLIO MOUNT EXTENSIONS ===== */
+.nav-active {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+.portfolio-showcase-sec {
+  background: var(--soft);
+}
+
+.assignment-placeholder-card {
+  border: 2px dashed var(--accent) !important;
+  background: transparent !important;
+}
+
+.dynamic-placeholder-asset {
+  background: transparent !important;
+  color: var(--muted) !important;
+  font-size: 14px !important;
+  font-weight: 500;
+  padding: 20px;
+  text-align: center;
+}

@@ -1,0 +1,47 @@
+/* ===== SERVICES INTERFACE EXTENSIONS ===== */
+.nav-active {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+.services-hero {
+  background: linear-gradient(135deg, #fdf0fb 0%, #eef4ff 50%, #f0fdf6 100%);
+  text-align: center;
+  padding: 60px 40px 30px;
+  position: relative;
+}
+
+.services-hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.services-catalog-wrapper {
+  background: #fff;
+  padding-top: 20px;
+}
+
+.category-header-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--txt);
+  margin-top: 40px;
+  border-bottom: 2px solid #f8f0fd;
+  padding-bottom: 8px;
+}
+
+.category-subtitle-lbl {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 4px;
+  margin-bottom: 24px;
+}
+
+.services-grid {
+  margin-bottom: 40px;
+}

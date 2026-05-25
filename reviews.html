@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Testimonials - ArtCanvas Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="reviews.css">
+</head>
+<body>
+
+  <nav>
+    <div class="logo">✦ ArtCanvas Studio</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="orders.html">Orders</a></li>
+      <li><a href="reviews.html" class="nav-active">Reviews</a></li>
+      <li><a href="about-contact.html">About</a></li>
+      <li><a href="about-contact.html#contact">Contact</a></li>
+    </ul>
+<button class="btn-nav" onclick="window.location.href='/login.html'">Login ✦</button>
+  </nav>
+
+  <section class="reviews-feedback-section">
+    <div class="section-label">Public Endorsements</div>
+    <div class="section-title">Client Reviews & Testimonials</div>
+    <div class="section-sub">Inspect verified service platform metrics recorded directly inside our design ecosystem.[cite: 1]</div>
+
+    <div class="contact-wrap">
+      <!-- INPUT SUBMISSION SYSTEM FORM -->
+      <div class="contact-form">
+        <h3 class="form-title-heading">Post New Platform Review 🎨[cite: 1]</h3>
+        <form id="submissionSystemReview" onsubmit="pushReviewToFeed(event)">
+          <div class="form-group">
+            <label>Full Representative Identifier Name</label>
+            <input type="text" id="formReviewName" placeholder="e.g. Maria Khan" required>
+          </div>
+          <div class="form-group">
+            <label>Corporate/Project Role Specification</label>
+            <input type="text" id="formReviewRole" placeholder="e.g. Technical UI Producer" required>
+          </div>
+          <div class="form-group">
+            <label>Target Rating Evaluation Score[cite: 1]</label>
+            <select id="formReviewRating">
+              <option value="★★★★★">★★★★★ (5 Stars)</option>
+              <option value="★★★★☆">★★★★☆ (4 Stars)</option>
+              <option value="★★★☆☆">★★★☆☆ (3 Stars)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Detailed Evaluation Log Narrative</label>
+            <textarea rows="4" id="formReviewText" placeholder="Detail your experience with asset accuracy, latency times, and rendering operations..." required></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Submit Public Feedback ✦</button>
+        </form>
+      </div>
+
+      <!-- LIVE TESTIMONIALS VERTICAL STACK -->
+      <div class="testimonials-feed-column">
+        <h3 class="feed-title-heading">Active Client Feed System[cite: 1]</h3>
+        <div class="reviews-stack-container" id="liveReviewsContainer">
+          
+          <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <div class="review-text">"Absolutely stunning character design! The artist captured every detail I imagined. Exceeded all expectations."[cite: 1]</div>
+            <div class="reviewer">
+              <div class="avatar" style="background:linear-gradient(135deg,#c084d4,#85aef7)">AM</div>
+              <div><div class="rev-name">Aisha Malik[cite: 1]</div><div class="rev-role">Game Developer[cite: 1]</div></div>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <div class="review-text">"My book cover looks like it belongs on a bestseller shelf. Professional, fast, and so creative!"[cite: 1]</div>
+            <div class="reviewer">
+              <div class="avatar" style="background:linear-gradient(135deg,#f9c6d0,#f0e6b8)">SR</div>
+              <div><div class="rev-name">Sarah Raza[cite: 1]</div><div class="rev-role">Author[cite: 1]</div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="logo">✦ ArtCanvas Studio</div>
+  </footer>
+
+  <script src="reviews.js"></script>
+</body>
+</html>

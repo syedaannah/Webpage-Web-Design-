@@ -1,0 +1,29 @@
+/* ===== PRICING MODULE ALIGNMENT ===== */
+.nav-active {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+.pricing-matrix-sec {
+  background: #fff;
+  text-align: center;
+}
+
+.pro-btn-border {
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+}
+
+.pro-btn-border:hover {
+  background: #10b981 !important;
+  color: #fff !important;
+}
+
+#serviceConfigBadge {
+  background: rgba(192, 132, 212, 0.12);
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — ArtCanvas Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<button class="btn-nav" onclick="executeSignOutRoute()">Logout ✦</button>
+
+  <div class="admin-layout">
+
+    <!-- ADMIN SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="admin-logo">✦ ArtCanvas<br><span>Admin Panel</span></div>
+      <nav class="admin-nav">
+        <a href="#" class="anav active" onclick="adminTab('dashboard', this)">📊 Dashboard</a>
+        <a href="#" class="anav" onclick="adminTab('orders', this)">📦 All Orders</a>
+        <a href="#" class="anav" onclick="adminTab('reviews', this)">⭐ Reviews</a>
+        <a href="#" class="anav" onclick="adminTab('services', this)">🎨 Services</a>
+        <a href="#" class="anav" onclick="adminTab('users', this)">👥 Users</a>
+        <a href="index.html" class="anav" style="margin-top:auto;color:rgba(255,255,255,.4)">← Back to Site</a>
+      </nav>
+    </aside>
+
+    <!-- ADMIN MAIN -->
+    <div class="admin-main">
+
+      <!-- TOPBAR -->
+      <div class="admin-topbar">
+        <div>
+          <div style="font-size:18px;font-weight:700;color:var(--txt)" id="adminPageTitle">Dashboard</div>
+          <div style="font-size:13px;color:var(--muted)" id="adminPageSub">Welcome back, Admin</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="notif-btn">🔔<span class="notif-dot"></span></div>
+          <div class="admin-avatar">AD</div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD -->
+      <div class="admin-tab active" id="atab-dashboard">
+        <div class="stats-row">
+          <div class="stat-card"><div class="sc-icon" style="background:#fde8f0">📦</div><div class="sc-num">24</div><div class="sc-lbl">Total Orders</div><div class="sc-change up">+3 this week</div></div>
+          <div class="stat-card"><div class="sc-icon" style="background:#eef8e8">✅</div><div class="sc-num">18</div><div class="sc-lbl">Completed</div><div class="sc-change up">+2 this week</div></div>
+          <div class="stat-card"><div class="sc-icon" style="background:#fef8ee">⏳</div><div class="sc-num">4</div><div class="sc-lbl">Pending</div><div class="sc-change">Needs attention</div></div>
+          <div class="stat-card"><div class="sc-icon" style="background:#e8f0fe">💰</div><div class="sc-num">$2,840</div><div class="sc-lbl">Revenue</div><div class="sc-change up">+$420 this week</div></div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="dash-card">
+            <h4>Recent Orders</h4>
+            <table class="admin-table">
+              <thead><tr><th>Client</th><th>Service</th><th>Amount</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Aisha Khan</td><td>Character Design</td><td>$79</td><td><span class="status-badge status-progress">In Progress</span></td></tr>
+                <tr><td>Sarah Raza</td><td>Book Cover</td><td>$29</td><td><span class="status-badge status-pending">Pending</span></td></tr>
+                <tr><td>Khalid Ahmed</td><td>Logo Design</td><td>$149</td><td><span class="status-badge status-done">Completed</span></td></tr>
+                <tr><td>Omar Sheikh</td><td>3D Modeling</td><td>$79</td><td><span class="status-badge status-progress">In Progress</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="dash-card">
+            <h4>Revenue by Category</h4>
+            <div class="bar-chart" id="barChart"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALL ORDERS -->
+      <div class="admin-tab" id="atab-orders">
+        <div class="table-toolbar">
+          <input type="text" placeholder="🔍 Search orders..." style="width:260px" id="orderSearch" oninput="filterOrders()">
+          <select id="statusFilter" onchange="filterOrders()">
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="progress">In Progress</option>
+            <option value="done">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="admin-card">
+          <table class="admin-table full" id="ordersTable">
+            <thead>
+              <tr>
+                <th>Order ID</th><th>Client</th><th>Service</th><th>Tier</th><th>Amount</th><th>Date</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody">
+              <tr data-status="progress"><td>#ACS-2847</td><td>Aisha Khan</td><td>Character Design</td><td>Standard</td><td>$79</td><td>May 21</td><td><span class="status-badge status-progress">In Progress</span></td><td class="action-cell"><button class="act-btn accept" onclick="updateStatus(this,'done')">✓ Complete</button><button class="act-btn decline" onclick="updateStatus(this,'cancelled')">✗ Cancel</button></td></tr>
+              <tr data-status="pending"><td>#ACS-2846</td><td>Sarah Raza</td><td>Book Cover Illustration</td><td>Basic</td><td>$29</td><td>May 22</td><td><span class="status-badge status-pending">Pending</span></td><td class="action-cell"><button class="act-btn accept" onclick="updateStatus(this,'progress')">▶ Accept</button><button class="act-btn decline" onclick="updateStatus(this,'cancelled')">✗ Decline</button></td></tr>
+              <tr data-status="done"><td>#ACS-2845</td><td>Khalid Ahmed</td><td>Logo Design</td><td>Pro</td><td>$149</td><td>May 15</td><td><span class="status-badge status-done">Completed</span></td><td class="action-cell"><button class="act-btn view" onclick="alert('View order details')">👁 View</button></td></tr>
+              <tr data-status="pending"><td>#ACS-2844</td><td>Omar Sheikh</td><td>3D Character Modeling</td><td>Standard</td><td>$79</td><td>May 23</td><td><span class="status-badge status-pending">Pending</span></td><td class="action-cell"><button class="act-btn accept" onclick="updateStatus(this,'progress')">▶ Accept</button><button class="act-btn decline" onclick="updateStatus(this,'cancelled')">✗ Decline</button></td></tr>
+              <tr data-status="cancelled"><td>#ACS-2843</td><td>Fatima Noor</td><td>Poster Design</td><td>Basic</td><td>$29</td><td>May 18</td><td><span class="status-badge" style="background:#fde8e8;color:#f87171">Cancelled</span></td><td class="action-cell"><button class="act-btn view" onclick="alert('View cancellation details')">👁 View</button></td></tr>
+              <tr data-status="progress"><td>#ACS-2842</td><td>Ali Hassan</td><td>Sprite Animation</td><td>Pro</td><td>$149</td><td>May 19</td><td><span class="status-badge status-progress">In Progress</span></td><td class="action-cell"><button class="act-btn accept" onclick="updateStatus(this,'done')">✓ Complete</button><button class="act-btn decline" onclick="updateStatus(this,'cancelled')">✗ Cancel</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- REVIEWS -->
+      <div class="admin-tab" id="atab-reviews">
+        <div class="admin-card" style="margin-bottom:20px">
+          <div class="reviews-summary">
+            <div class="rev-stat"><div class="rev-big">4.9</div><div class="stars" style="font-size:20px;color:#f59e0b">★★★★★</div><div style="font-size:13px;color:var(--muted);margin-top:4px">Average Rating</div></div>
+            <div class="rev-bars">
+              <div class="rbar-row"><span>5★</span><div class="rbar"><div class="rbar-fill" style="width:80%;background:#10b981"></div></div><span>80%</span></div>
+              <div class="rbar-row"><span>4★</span><div class="rbar"><div class="rbar-fill" style="width:15%;background:#34d399"></div></div><span>15%</span></div>
+              <div class="rbar-row"><span>3★</span><div class="rbar"><div class="rbar-fill" style="width:5%;background:#fbbf24"></div></div><span>5%</span></div>
+              <div class="rbar-row"><span>2★</span><div class="rbar"><div class="rbar-fill" style="width:0%"></div></div><span>0%</span></div>
+              <div class="rbar-row"><span>1★</span><div class="rbar"><div class="rbar-fill" style="width:0%"></div></div><span>0%</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="reviews-admin-list">
+          <div class="rev-admin-card">
+            <div class="rev-head"><div><strong>Aisha Malik</strong><span class="rev-service">Character Design</span></div><div class="stars" style="color:#f59e0b">★★★★★</div></div>
+            <p class="review-text">"Absolutely stunning character design! The artist captured every detail."</p>
+            <div class="rev-actions"><button class="act-btn accept">✓ Approve</button><button class="act-btn decline">✗ Hide</button></div>
+          </div>
+          <div class="rev-admin-card">
+            <div class="rev-head"><div><strong>Sarah Raza</strong><span class="rev-service">Book Cover</span></div><div class="stars" style="color:#f59e0b">★★★★★</div></div>
+            <p class="review-text">"My book cover looks like it belongs on a bestseller shelf!"</p>
+            <div class="rev-actions"><button class="act-btn accept">✓ Approve</button><button class="act-btn decline">✗ Hide</button></div>
+          </div>
+          <div class="rev-admin-card">
+            <div class="rev-head"><div><strong>Khalid Ahmed</strong><span class="rev-service">Logo Design</span></div><div class="stars" style="color:#f59e0b">★★★★☆</div></div>
+            <p class="review-text">"Great logo, delivered fast. Minor revision was handled smoothly."</p>
+            <div class="rev-actions"><button class="act-btn accept">✓ Approve</button><button class="act-btn decline">✗ Hide</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SERVICES MANAGEMENT -->
+      <div class="admin-tab" id="atab-services">
+        <div class="table-toolbar">
+          <button class="btn-primary" style="font-size:13px;padding:9px 20px" onclick="alert('Add new service form would open')">+ Add Service</button>
+        </div>
+        <div class="admin-card">
+          <table class="admin-table full">
+            <thead><tr><th>Service Name</th><th>Category</th><th>Basic</th><th>Standard</th><th>Pro</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td>Character Design</td><td>2D Art</td><td>$29</td><td>$79</td><td>$149</td><td><span class="status-badge status-done">Active</span></td><td class="action-cell"><button class="act-btn view" onclick="alert('Edit service')">✏️ Edit</button><button class="act-btn decline" onclick="alert('Delete service')">🗑 Delete</button></td></tr>
+              <tr><td>Logo Design</td><td>Graphic Design</td><td>$29</td><td>$79</td><td>$149</td><td><span class="status-badge status-done">Active</span></td><td class="action-cell"><button class="act-btn view">✏️ Edit</button><button class="act-btn decline">🗑 Delete</button></td></tr>
+              <tr><td>3D Character Modeling</td><td>3D Art</td><td>$49</td><td>$99</td><td>$199</td><td><span class="status-badge status-done">Active</span></td><td class="action-cell"><button class="act-btn view">✏️ Edit</button><button class="act-btn decline">🗑 Delete</button></td></tr>
+              <tr><td>Book Cover Illustration</td><td>Illustration</td><td>$29</td><td>$69</td><td>$129</td><td><span class="status-badge status-pending">Draft</span></td><td class="action-cell"><button class="act-btn view">✏️ Edit</button><button class="act-btn decline">🗑 Delete</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- USERS -->
+      <div class="admin-tab" id="atab-users">
+        <div class="admin-card">
+          <table class="admin-table full">
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Orders</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="profile-avatar" style="width:32px;height:32px;font-size:12px">AK</div>Aisha Khan</div></td><td>aisha@email.com</td><td><span class="status-badge status-progress">Client</span></td><td>3</td><td>Jan 2025</td><td class="action-cell"><button class="act-btn view">👁 View</button><button class="act-btn decline">🚫 Ban</button></td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="profile-avatar" style="width:32px;height:32px;font-size:12px">SR</div>Sarah Raza</div></td><td>sarah@email.com</td><td><span class="status-badge status-progress">Client</span></td><td>1</td><td>Mar 2025</td><td class="action-cell"><button class="act-btn view">👁 View</button><button class="act-btn decline">🚫 Ban</button></td></tr>
+              <tr><td><div style="display:flex;align-items:center;gap:8px"><div class="profile-avatar" style="width:32px;height:32px;font-size:12px">KA</div>Khalid Ahmed</div></td><td>khalid@email.com</td><td><span class="status-badge status-progress">Client</span></td><td>2</td><td>Feb 2025</td><td class="action-cell"><button class="act-btn view">👁 View</button><button class="act-btn decline">🚫 Ban</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

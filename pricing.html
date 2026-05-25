@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing Plans - ArtCanvas Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="pricing.css">
+</head>
+<body>
+
+  <nav>
+    <div class="logo">✦ ArtCanvas Studio</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="pricing.html" class="nav-active">Pricing</a></li>
+      <li><a href="orders.html">Orders</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+      <li><a href="about-contact.html">About</a></li>
+      <li><a href="about-contact.html#contact">Contact</a></li>
+    </ul>
+<button class="btn-nav" onclick="window.location.href='/login.html'">Login ✦</button>  </nav>
+
+  <section class="pricing-matrix-sec">
+    <div class="section-label" id="serviceConfigBadge">Selected Config: Default Configuration</div>
+    <div class="section-title">Simple, Transparent Pricing</div>
+    <div class="section-sub">Choose a production asset framework engineered for your turnaround requirements.[cite: 1]</div>
+    
+    <div class="pricing-grid">
+      <!-- Basic Card -->
+      <div class="price-card">
+        <div class="price-tier" style="color:#85aef7">Basic Tier[cite: 1]</div>
+        <div class="price-amt" style="color:#85aef7">$29<span>/project</span></div>
+        <div class="price-desc">Perfect for simple baseline layout needs[cite: 1]</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>1 Art Asset Output Piece</li>
+          <li><span class="check">✓</span>2 Iteration Revisions Cycle</li>
+          <li><span class="check">✓</span>High-Res PNG/JPEG Formats</li>
+          <li><span class="check">✓</span>7-Day Standard Turnaround</li>
+        </ul>
+        <button class="btn-price" onclick="capturePlanCheckout('Basic', 29)">Get Started</button>
+      </div>
+
+      <!-- Standard Featured Card -->
+      <div class="price-card featured">
+        <div class="popular-badge">Most Popular ✦</div>
+        <div class="price-tier" style="color:#c084d4">Standard Tier[cite: 1]</div>
+        <div class="price-amt" style="color:#c084d4">$79<span>/project</span></div>
+        <div class="price-desc">Ideal for professional assets & apps[cite: 1]</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>3 Core Production Graphics Pieces</li>
+          <li><span class="check">✓</span>5 Iteration Revisions Included</li>
+          <li><span class="check">✓</span>Vector formats + Source Files</li>
+          <li><span class="check">✓</span>Commercial Rights License Allocation</li>
+          <li><span class="check">✓</span>5-Day Rapid Turnaround Speed</li>
+        </ul>
+        <button class="btn-price featured-btn" onclick="capturePlanCheckout('Standard', 79)">Get Standard</button>
+      </div>
+
+      <!-- Pro Card -->
+      <div class="price-card">
+        <div class="price-tier" style="color:#10b981">Pro Tier[cite: 1]</div>
+        <div class="price-amt" style="color:#10b981">$149<span>/project</span></div>
+        <div class="price-desc">For active game studios & marketing designs[cite: 1]</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>Unlimited Asset Generation Loops</li>
+          <li><span class="check">✓</span>Unlimited Revisions Guarantee</li>
+          <li><span class="check">✓</span>Source Deliverables (.PSD / .Blend)</li>
+          <li><span class="check">✓</span>Extended Multiplatform Legal Usage</li>
+          <li><span class="check">✓</span>Priority Support Comms Operations</li>
+        </ul>
+        <button class="btn-price pro-btn-border" onclick="capturePlanCheckout('Pro', 149)">Get Pro</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="logo">✦ ArtCanvas Studio</div>
+    <div class="footer-bottom">© 2025 ArtCanvas Studio</div>
+  </footer>
+
+  <script src="pricing.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+/* ===== ABOUT/CONTACT INTERFACE STYLING MODULE ===== */
+.nav-active {
+  color: var(--accent) !important;
+  font-weight: 600;
+}
+
+.about-hero-section {
+  background: linear-gradient(135deg, #fdf0fb 0%, #eef4ff 50%, #f0fdf6 100%);
+  text-align: center;
+  padding: 80px 20px 50px;
+}
+
+.about-hero-section h1 {
+  font-size: 40px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.about-hero-section p {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.contact-form-layout-sec {
+  background: #fff;
+}
